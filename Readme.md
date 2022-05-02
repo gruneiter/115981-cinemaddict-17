@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Dmitry Mikhaylov](https://up.htmlacademy.ru/ecmascript/17/user/115981).
-* Наставник: `Неизвестно`.
+* Наставник: Полина Шнайдер.
 
 ---
 
