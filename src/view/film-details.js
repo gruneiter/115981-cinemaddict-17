@@ -173,7 +173,9 @@ export default class FilmDetails {
   }
 
   getElement() {
-    if (!this.element) this.element = createElement(this.getTemplate());
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
     return this.element;
   }
 }

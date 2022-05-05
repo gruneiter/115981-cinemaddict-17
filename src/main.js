@@ -1,10 +1,10 @@
-import { render, RenderPosition } from './render.js';
-import Profile from "./view/profile";
-import MainNavigation from "./view/main-navigation";
-import Sort from "./view/sort";
-import FooterStatistics from "./view/footer-statistics";
-import FilmsPresenter from "./presenter/films";
-import FilmDetails from "./view/film-details";
+import { render } from './render.js';
+import Profile from './view/profile';
+import MainNavigation from './view/main-navigation';
+import Sort from './view/sort';
+import FooterStatistics from './view/footer-statistics';
+import FilmsPresenter from './presenter/films';
+import FilmDetails from './view/film-details';
 
 const main = document.querySelector('.main');
 const header = document.querySelector('.header');

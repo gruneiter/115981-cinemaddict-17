@@ -28,7 +28,9 @@ export default class FilmCard {
   }
 
   getElement() {
-    if (!this.element) this.element = createElement(this.getTemplate());
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
     return this.element;
   }
 }

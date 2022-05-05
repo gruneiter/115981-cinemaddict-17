@@ -1,7 +1,7 @@
-import Films from "../view/films";
-import FilmCard from "../view/film-card";
-import FilmsList from "../view/films-list";
-import ShowMore from "../view/show-more";
+import Films from '../view/films';
+import FilmCard from '../view/film-card';
+import FilmsList from '../view/films-list';
+import ShowMore from '../view/show-more';
 
 import { render } from '../render.js';
 

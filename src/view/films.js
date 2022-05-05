@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 
-const createTemplate = () => (`<section class="films"></section>`);
+const createTemplate = () => ('<section class="films"></section>');
 
 export default class Films {
   getTemplate() {
@@ -8,7 +8,9 @@ export default class Films {
   }
 
   getElement() {
-    if (!this.element) this.element = createElement(this.getTemplate());
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
     return this.element;
   }
 }
