@@ -1,4 +1,4 @@
-import createMoviesList from "../fish/movie";
+import createMoviesList from '../fish/movie';
 
 export default class MovieModel {
   constructor(amount) {

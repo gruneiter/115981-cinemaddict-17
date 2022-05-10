@@ -10,12 +10,12 @@ export const getRandomArray = (array) => {
     arrayNew[index] = getRandomItem(array);
   });
   return [...new Set(arrayNew)];
-}
+};
 
 export const getRandomValue = (minValue, maxValue, range) => {
   const randomNumber = Math.random() * (maxValue - minValue + 1) + minValue;
   return Number(randomNumber.toFixed(range));
-}
+};
 
 export const getTimeFromMinutes = (mins) => {
   const hours = Math.trunc(mins/60);
@@ -25,7 +25,7 @@ export const getTimeFromMinutes = (mins) => {
     return `${hours}h ${minutes}m`;
   }
   return `${mins}m`;
-}
+};
 
 export const cutDescription = (string) => `${string.substr(0, 140)}…`;
 

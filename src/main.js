@@ -5,14 +5,14 @@ import Sort from './view/sort';
 import FooterStatistics from './view/footer-statistics';
 import FilmsPresenter from './presenter/films';
 import FilmDetails from './view/film-details';
-import MovieModel from "./model/movie";
+import MovieModel from './model/movie';
 
 const main = document.querySelector('.main');
 const header = document.querySelector('.header');
 const footer = document.querySelector('.footer');
 const body = document.querySelector('body');
 const films = new FilmsPresenter;
-const moviesModel = new MovieModel(5)
+const moviesModel = new MovieModel(5);
 const movieDetail = moviesModel.getMovies()[0];
 
 render(new Profile(), header);

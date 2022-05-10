@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
-import createComment from "../fish/comment";
+import createComment from '../fish/comment';
 
 const renderComment = (comment) => (`
     <li class="film-details__comment">
@@ -157,6 +157,7 @@ export default class FilmDetails {
     this.film = film;
     this.comments = comments;
   }
+
   getTemplate() {
     return createTemplate(this.film);
   }

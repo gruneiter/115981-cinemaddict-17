@@ -23,13 +23,14 @@ const createTemplate = (film) => {
         <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
       </div>
     </article>
-   `)
+   `);
 };
 
 export default class FilmCard {
   constructor(film) {
     this.film = film;
   }
+
   getTemplate() {
     return createTemplate(this.film);
   }

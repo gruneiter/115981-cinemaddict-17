@@ -1,5 +1,5 @@
 import { getRandomItem, getRandomValue, getRandomArray } from '../helpers';
-import data from './data.json'
+import data from './data.json';
 
 const { film, comment } = data;
 

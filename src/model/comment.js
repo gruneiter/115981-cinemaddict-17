@@ -1,4 +1,4 @@
-import createComment from "../fish/comment";
+import createComment from '../fish/comment';
 
 export default class CommentModel {
   constructor() {
