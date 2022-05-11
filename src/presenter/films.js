@@ -14,8 +14,10 @@ export default class FilmsPresenter {
   mostCommented = new FilmsList({ name: 'Most commented' }, true);
 
 
-  init = (mainContainer) => {
+  init = (mainContainer, moviesModel) => {
     this.mainContainer = mainContainer;
+    this.model = moviesModel;
+    this.movies = Array.from(this.model.getMovies());
     render(this.main, this.mainContainer);
     render(this.allMovies, this.main.getElement());
     render(new ShowMore(), this.allMovies.getElement());
@@ -23,9 +25,13 @@ export default class FilmsPresenter {
     render(this.mostCommented, this.main.getElement());
     const filmsDivElement = document.querySelectorAll('.films-list__container');
     for (let i = 0; i < CARD_COUNT; i++) {
-      render(new FilmCard(), filmsDivElement[0]);
+      render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[0]);
     }
-    render(new FilmCard(), filmsDivElement[1]);
-    render(new FilmCard(), filmsDivElement[2]);
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[1]);
+    }
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[2]);
+    }
   };
 }
