@@ -9,14 +9,16 @@ const createTemplate = () => (`
    `);
 
 export default class Sort {
-  getTemplate() {
+  #element;
+
+  get template() {
     return createTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 }
