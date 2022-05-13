@@ -5,10 +5,7 @@ export const getRandomNumber = (minValue, maxValue) =>  Math.floor(Math.random()
 export const getRandomItem = (arr) => arr[getRandomNumber(0, arr.length - 1)];
 
 export const getRandomArray = (array) => {
-  const arrayNew = new Array(getRandomNumber(1, array.length)).fill(' ');
-  arrayNew.forEach((element, index) => {
-    arrayNew[index] = getRandomItem(array);
-  });
+  const arrayNew = new Array(getRandomNumber(1, array.length)).fill(' ').map(() => getRandomItem(array));
   return [...new Set(arrayNew)];
 };
 

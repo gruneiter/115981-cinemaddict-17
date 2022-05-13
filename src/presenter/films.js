@@ -3,9 +3,9 @@ import FilmCard from '../view/film-card';
 import FilmsList from '../view/films-list';
 import ShowMore from '../view/show-more';
 
-import { render } from '../render.js';
+import { MOVIES_COUNT, MOVIES_COUNT_TOP } from "../constants";
 
-const CARD_COUNT = 5;
+import { render } from '../render.js';
 
 export default class FilmsPresenter {
   main = new Films();
@@ -24,13 +24,13 @@ export default class FilmsPresenter {
     render(this.topRated, this.main.getElement());
     render(this.mostCommented, this.main.getElement());
     const filmsDivElement = document.querySelectorAll('.films-list__container');
-    for (let i = 0; i < CARD_COUNT; i++) {
+    for (let i = 0; i < MOVIES_COUNT; i++) {
       render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[0]);
     }
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < MOVIES_COUNT_TOP; i++) {
       render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[1]);
     }
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < MOVIES_COUNT_TOP; i++) {
       render(new FilmCard(this.movies[i].filmInfo), filmsDivElement[2]);
     }
   };
