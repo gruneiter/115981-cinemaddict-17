@@ -11,19 +11,23 @@ const createTemplate = (title, extra) => (`
 
 
 export default class FilmsList {
+  #element;
+  #title;
+  #extra;
+
   constructor(title, extra) {
-    this.title = title;
-    this.extra = extra;
+    this.#title = title;
+    this.#extra = extra;
   }
 
-  getTemplate() {
-    return createTemplate(this.title, this.extra);
+  get template() {
+    return createTemplate(this.#title, this.#extra);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 }

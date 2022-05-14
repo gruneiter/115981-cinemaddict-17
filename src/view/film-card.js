@@ -27,18 +27,21 @@ const createTemplate = (film) => {
 };
 
 export default class FilmCard {
+  #film;
+  #element;
+
   constructor(film) {
-    this.film = film;
+    this.#film = film;
   }
 
-  getTemplate() {
-    return createTemplate(this.film);
+  get template() {
+    return createTemplate(this.#film);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 }

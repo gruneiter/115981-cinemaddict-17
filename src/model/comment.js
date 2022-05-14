@@ -1,9 +1,13 @@
 import createComment from '../fish/comment';
 
 export default class CommentModel {
+  #comments;
+
   constructor() {
-    this.comments = createComment(4);
+    this.#comments = createComment();
   }
 
-  getMovies = () => this.comments;
+  get comments() {
+    return this.#comments;
+  }
 }

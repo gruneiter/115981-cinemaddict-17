@@ -24,11 +24,6 @@ const createMovie = () => ({
   }
 });
 
-const createMoviesList = (amount) => {
-  const array = [];
-  for (let i = 1; i <= amount; i++) {
-    array.push(createMovie());
-  }
-  return array;
-};
+const createMoviesList = (amount) => new Array(amount).fill(0).map(() => createMovie());
+
 export default createMoviesList;

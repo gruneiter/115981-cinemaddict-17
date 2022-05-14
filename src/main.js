@@ -4,20 +4,17 @@ import MainNavigation from './view/main-navigation';
 import Sort from './view/sort';
 import FooterStatistics from './view/footer-statistics';
 import FilmsPresenter from './presenter/films';
-import FilmDetails from './view/film-details';
 import MovieModel from './model/movie';
+import { MOVIES_COUNT } from './constants';
 
 const main = document.querySelector('.main');
 const header = document.querySelector('.header');
 const footer = document.querySelector('.footer');
-const body = document.querySelector('body');
-const films = new FilmsPresenter;
-const moviesModel = new MovieModel(5);
-const movieDetail = moviesModel.getMovies()[0];
+const moviesModel = new MovieModel(MOVIES_COUNT);
+const films = new FilmsPresenter(main, moviesModel);
 
 render(new Profile(), header);
 render(new MainNavigation(), main);
 render(new Sort(), main);
 render(new FooterStatistics(), footer);
-render(new FilmDetails(movieDetail), body);
-films.init(main, moviesModel);
+films.init();

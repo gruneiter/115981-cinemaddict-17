@@ -1,6 +1,7 @@
 import { createElement } from '../render.js';
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
 import createComment from '../fish/comment';
+import { COMMENTS_COUNT } from '../constants';
 
 const renderComment = (comment) => (`
     <li class="film-details__comment">
@@ -36,7 +37,7 @@ const createTemplate = (film) => {
     actors,
   } = filmInfo;
   const comments = [];
-  for (let i = 0; i < 4; i += 1) {
+  for (let i = 0; i < COMMENTS_COUNT; i += 1) {
     comments.push(createComment());
   }
   return (`
@@ -153,19 +154,21 @@ const createTemplate = (film) => {
 };
 
 export default class FilmDetails {
+  #element;
+
   constructor(film, comments) {
     this.film = film;
     this.comments = comments;
   }
 
-  getTemplate() {
+  get template() {
     return createTemplate(this.film);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 }

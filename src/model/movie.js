@@ -1,9 +1,13 @@
 import createMoviesList from '../fish/movie';
 
 export default class MovieModel {
+  #movies;
+
   constructor(amount) {
-    this.movies = createMoviesList(amount);
+    this.#movies = createMoviesList(amount);
   }
 
-  getMovies = () => this.movies;
+  get movies() {
+    return this.#movies;
+  }
 }
