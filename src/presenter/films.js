@@ -8,12 +8,12 @@ import { MOVIES_COUNT, MOVIES_COUNT_TOP } from '../constants';
 
 import { render } from '../render.js';
 
-const body = document.querySelector('body');
+const bodyElement = document.querySelector('body');
 
 const removeDetails = () => {
-  const details = document.querySelector('.film-details');
-  details.remove();
-  body.classList.remove('hide-overflow');
+  const detailsElement = document.querySelector('.film-details');
+  detailsElement.remove();
+  bodyElement.classList.remove('hide-overflow');
 };
 
 const closeOnEsc = (e) => {
@@ -25,9 +25,9 @@ const closeOnEsc = (e) => {
 };
 
 const showDetails = (details) => {
-  const oldDetails = document.querySelector('.film-details');
-  if (oldDetails) {
-    oldDetails.remove();
+  const oldDetailsElement = document.querySelector('.film-details');
+  if (oldDetailsElement) {
+    oldDetailsElement.remove();
   }
   details.element.addEventListener('click', (e) => {
     if (e.target.classList.contains('film-details__close-btn')) {
@@ -35,13 +35,13 @@ const showDetails = (details) => {
     }
   });
   document.addEventListener('keydown', closeOnEsc);
-  body.classList.add('hide-overflow');
-  render(details, body);
+  bodyElement.classList.add('hide-overflow');
+  render(details, bodyElement);
 };
 
 const cardOpen = (film, movie) => {
-  const link = film.element.querySelector('.film-card__link');
-  link.addEventListener('click', (e) => {
+  const linkElement = film.element.querySelector('.film-card__link');
+  linkElement.addEventListener('click', (e) => {
     e.preventDefault();
     showDetails(new FilmDetails(movie));
   });
