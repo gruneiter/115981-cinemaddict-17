@@ -7,14 +7,14 @@ import FilmsPresenter from './presenter/films';
 import MovieModel from './model/movie';
 import { MOVIES_COUNT } from './constants';
 
-const main = document.querySelector('.main');
-const header = document.querySelector('.header');
-const footer = document.querySelector('.footer');
+const mainElement = document.querySelector('.main');
+const headerElement = document.querySelector('.header');
+const footerElement = document.querySelector('.footer');
 const moviesModel = new MovieModel(MOVIES_COUNT);
-const films = new FilmsPresenter(main, moviesModel);
+const films = new FilmsPresenter(mainElement, moviesModel);
 
-render(new Profile(), header);
-render(new MainNavigation(), main);
-render(new Sort(), main);
-render(new FooterStatistics(), footer);
+render(new Profile(), headerElement);
+render(new MainNavigation(), mainElement);
+render(new Sort(), mainElement);
+render(new FooterStatistics(), footerElement);
 films.init();
