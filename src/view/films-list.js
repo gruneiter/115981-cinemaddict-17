@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = (title, extra) => (`
     <section class="films-list ${ extra ? ' films-list--extra' : '' }">
@@ -10,24 +10,17 @@ const createTemplate = (title, extra) => (`
   `);
 
 
-export default class FilmsList {
-  #element;
+export default class FilmsList extends AbstractStatefulView {
   #title;
   #extra;
 
   constructor(title, extra) {
+    super();
     this.#title = title;
     this.#extra = extra;
   }
 
   get template() {
     return createTemplate(this.#title, this.#extra);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 }

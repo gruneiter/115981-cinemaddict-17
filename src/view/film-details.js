@@ -1,4 +1,5 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
 import createComment from '../fish/comment';
 import { COMMENTS_COUNT } from '../constants';
@@ -153,10 +154,9 @@ const createTemplate = (film) => {
   `);
 };
 
-export default class FilmDetails {
-  #element;
-
+export default class FilmDetails extends AbstractStatefulView {
   constructor(film, comments) {
+    super();
     this.film = film;
     this.comments = comments;
   }
@@ -165,10 +165,15 @@ export default class FilmDetails {
     return createTemplate(this.film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
+  setCloseHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#closeHandler);
+  };
+
+  #closeHandler = (e) => {
+    if (e.target.classList.contains('film-details__close-btn')) {
+      e.preventDefault();
+      this._callback.click();
     }
-    return this.#element;
-  }
+  };
 }

@@ -29,11 +29,7 @@ const showDetails = (details) => {
   if (oldDetailsElement) {
     oldDetailsElement.remove();
   }
-  details.element.addEventListener('click', (e) => {
-    if (e.target.classList.contains('film-details__close-btn')) {
-      removeDetails(details);
-    }
-  });
+  details.setCloseHandler(removeDetails);
   document.addEventListener('keydown', closeOnEsc);
   bodyElement.classList.add('hide-overflow');
   render(details, bodyElement);
@@ -86,7 +82,7 @@ export default class FilmsPresenter {
     render(this.#allMovies, this.#main.element);
     if (this.#movies.length > this.#moviesLoaded) {
       render(this.#showMoreElement, this.#allMovies.element);
-      this.#showMoreElement.element.addEventListener('click', this.#handleShowMoreButtonClick);
+      this.#showMoreElement.setClickHandler(this.#handleShowMoreButtonClick);
     }
     render(this.#topRated, this.#main.element);
     render(this.#mostCommented, this.#main.element);

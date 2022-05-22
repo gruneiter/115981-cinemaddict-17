@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = () => (`
     <section class="header__profile profile">
@@ -7,17 +7,8 @@ const createTemplate = () => (`
     </section>
   `);
 
-export default class Profile {
-  #element;
-
+export default class Profile extends AbstractStatefulView {
   get template() {
     return createTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 }

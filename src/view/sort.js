@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = () => (`
     <ul class="sort">
@@ -8,17 +8,8 @@ const createTemplate = () => (`
     </ul>
    `);
 
-export default class Sort {
-  #element;
-
+export default class Sort extends AbstractStatefulView {
   get template() {
     return createTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 }
