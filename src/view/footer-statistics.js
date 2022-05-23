@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = () => (`
     <section class="footer__statistics">
@@ -6,17 +6,8 @@ const createTemplate = () => (`
     </section>
   `);
 
-export default class FooterStatistics {
-  #element;
-
+export default class FooterStatistics extends AbstractStatefulView {
   get template() {
     return createTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 }

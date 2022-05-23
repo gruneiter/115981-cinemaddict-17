@@ -1,4 +1,5 @@
-import { createElement } from '../render.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+
 import { filmDate, getTimeFromMinutes, cutDescription } from '../helpers';
 
 const createTemplate = (film) => {
@@ -26,22 +27,15 @@ const createTemplate = (film) => {
    `);
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractStatefulView {
   #film;
-  #element;
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
   get template() {
     return createTemplate(this.#film);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 }
