@@ -3,7 +3,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { filmDate, getTimeFromMinutes, cutDescription } from '../helpers';
 
 const createTemplate = (film) => {
-  const { title, totalRating, release, runtime, genre, poster, description } = film;
+  const { title, totalRating, release, runtime, genre, poster, description, commentIds } = film;
   return (`
     <article class="film-card">
       <a class="film-card__link">
@@ -16,7 +16,7 @@ const createTemplate = (film) => {
         </p>
         <img src="./images/posters/${poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${cutDescription(description)}</p>
-        <span class="film-card__comments">5 comments</span>
+        <span class="film-card__comments">${ commentIds.length } comments</span>
       </a>
       <div class="film-card__controls">
         <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>

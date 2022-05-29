@@ -3,8 +3,8 @@ import { getRandomItem } from '../helpers';
 
 const { comment } = data;
 
-const createComment = () => ({
-  id: getRandomItem(comment.id),
+const createComment = (id) => ({
+  id,
   author: getRandomItem(comment.author),
   comment: getRandomItem(comment.comment),
   date: '2019-05-11T16:12:32.554Z',
