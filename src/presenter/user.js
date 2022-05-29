@@ -9,6 +9,8 @@ export default class UserPresenter {
   }
 
   init() {
-    render(new Profile(this.#rating), this.#headerElement);
+    if (this.#rating > 0) {
+      render(new Profile(this.#rating), this.#headerElement);
+    }
   }
 }

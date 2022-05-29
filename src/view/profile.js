@@ -23,9 +23,6 @@ export default class Profile extends AbstractStatefulView {
   }
 
   get template() {
-    if (this.rating <= 0) { return 'test'; }
-    else {
-      return createTemplate(this.rating);
-    }
+    return createTemplate(this.rating);
   }
 }
