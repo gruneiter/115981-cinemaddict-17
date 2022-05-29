@@ -1,5 +1,9 @@
 import { getRandomNumber } from '../helpers';
 
-const createUserRating = () => getRandomNumber(0, 30);
+const createUser = () => ({
+  rating: getRandomNumber(0, 30),
+  favourites: getRandomNumber(0, 30),
+  watchList: getRandomNumber(0, 30),
+});
 
-export default createUserRating;
+export default createUser;
