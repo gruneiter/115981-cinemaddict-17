@@ -1,6 +1,5 @@
 import { render } from './render.js';
 import Sort from './view/sort';
-import FooterStatistics from './view/footer-statistics';
 import FilmsPresenter from './presenter/films';
 import MovieModel from './model/movie';
 import CommentModel from './model/comment';
@@ -8,6 +7,9 @@ import { MOVIES_COUNT } from './constants';
 import UserModel from './model/user';
 import UserPresenter from './presenter/user';
 import MainNavigationPresenter from './presenter/main-navigation';
+import FooterPresenter from './presenter/footer';
+
+import {getRandomNumber} from './helpers';
 
 const mainElement = document.querySelector('.main');
 const footerElement = document.querySelector('.footer');
@@ -17,9 +19,10 @@ const films = new FilmsPresenter(mainElement, moviesModel, commentsModel);
 const user = new UserModel();
 const profile = new UserPresenter(user);
 const navigation = new MainNavigationPresenter(user, mainElement);
+const footer = new FooterPresenter(getRandomNumber(0, 1000000), footerElement);
 
 render(new Sort(), mainElement);
-render(new FooterStatistics(), footerElement);
 films.init();
 profile.init();
 navigation.init();
+footer.init();
