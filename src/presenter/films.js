@@ -35,18 +35,20 @@ const showDetails = (details) => {
   render(details, bodyElement);
 };
 
-const cardOpen = (film, movie) => {
+const cardOpen = (film, movie, comments) => {
   const linkElement = film.element.querySelector('.film-card__link');
   linkElement.addEventListener('click', (e) => {
     e.preventDefault();
-    showDetails(new FilmDetails(movie));
+    showDetails(new FilmDetails(movie, comments));
   });
 };
 
 export default class FilmsPresenter {
   #mainContainer;
-  #model;
+  #moviesModel;
+  #commentsModel;
   #movies;
+  #comments;
   #allMoviesTitle;
   #allMovies;
   #allMoviesContainerElement;
@@ -58,10 +60,12 @@ export default class FilmsPresenter {
   #moviesLoaded = Math.min(MOVIES_COUNT, MOVIES_COUNT_ROW);
   #showMoreElement = new ShowMore();
 
-  constructor(mainContainer, moviesModel) {
+  constructor(mainContainer, moviesModel, commentsModel) {
     this.#mainContainer = mainContainer;
-    this.#model = moviesModel;
-    this.#movies = Array.from(this.#model.movies);
+    this.#moviesModel = moviesModel;
+    this.#commentsModel = commentsModel;
+    this.#movies = Array.from(this.#moviesModel.movies);
+    this.#comments = Array.from(this.#commentsModel.comments);
     this.#allMoviesTitle = this.#movies.length > 0 ? 'All movies. Upcoming' : 'There are no movies in our database';
     this.#allMovies = new FilmsList({ name: this.#allMoviesTitle, hidden: this.#movies.length > 0 });
     this.#allMoviesContainerElement = this.#allMovies.element.querySelector('.films-list__container');
@@ -70,7 +74,7 @@ export default class FilmsPresenter {
   #handleShowMoreButtonClick = () => {
     this.#movies
       .slice(this.#moviesLoaded, this.#moviesLoaded + MOVIES_COUNT_ROW)
-      .forEach((movie) => render(new FilmCard(movie.filmInfo), this.#allMoviesContainerElement));
+      .forEach((movie) => render(new FilmCard(movie), this.#allMoviesContainerElement));
     this.#moviesLoaded += MOVIES_COUNT_ROW;
     if (this.#moviesLoaded > MOVIES_COUNT) {
       this.#showMoreElement.element.remove();
@@ -87,18 +91,18 @@ export default class FilmsPresenter {
     render(this.#topRated, this.#main.element);
     render(this.#mostCommented, this.#main.element);
     for (let i = 0; i < this.#moviesLoaded; i++) {
-      const film = new FilmCard(this.#movies[i].filmInfo);
-      cardOpen(film, this.#movies[i]);
+      const film = new FilmCard(this.#movies[i]);
+      cardOpen(film, this.#movies[i], this.#comments);
       render(film, this.#allMoviesContainerElement);
     }
     for (let i = 0; i < Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP); i++) {
-      const film = new FilmCard(this.#movies[i].filmInfo);
-      cardOpen(film, this.#movies[i]);
+      const film = new FilmCard(this.#movies[i]);
+      cardOpen(film, this.#movies[i], this.#comments);
       render(film, this.#topRatedContainerElement);
     }
     for (let i = 0; i < Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP); i++) {
-      const film = new FilmCard(this.#movies[i].filmInfo);
-      cardOpen(film, this.#movies[i]);
+      const film = new FilmCard(this.#movies[i]);
+      cardOpen(film, this.#movies[i], this.#comments);
       render(film, this.#mostCommentedContainerElement);
     }
   };

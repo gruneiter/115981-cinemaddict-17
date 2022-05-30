@@ -1,13 +1,21 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import {numberFormat} from '../helpers';
 
-const createTemplate = () => (`
+const createTemplate = (stats) => (`
     <section class="footer__statistics">
-      <p>130 291 movies inside</p>
+      <p>${numberFormat(stats)} movies inside</p>
     </section>
   `);
 
 export default class FooterStatistics extends AbstractStatefulView {
+  #stats;
+
+  constructor(stats = 0) {
+    super();
+    this.#stats = stats;
+  }
+
   get template() {
-    return createTemplate();
+    return createTemplate(this.#stats);
   }
 }

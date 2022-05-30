@@ -1,10 +1,12 @@
 import createComment from '../fish/comment';
+import data from '../fish/data.json';
+const { id } = data.comment;
 
 export default class CommentModel {
-  #comments;
+  #comments = [];
 
   constructor() {
-    this.#comments = createComment();
+    id.forEach((i) => this.#comments.push(createComment(i)));
   }
 
   get comments() {

@@ -29,3 +29,6 @@ export const cutDescription = (string) => `${string.substr(0, 140)}…`;
 export const filmDate = (date) => dayjs(date).format('D MMMM YYYY');
 
 export const commentDate = (date) => dayjs(date).format('YYYY/M/D h:mm');
+
+export const numberFormat = (price) =>
+  price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');

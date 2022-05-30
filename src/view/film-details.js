@@ -1,8 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
-import createComment from '../fish/comment';
-import { COMMENTS_COUNT } from '../constants';
 
 const renderComment = (comment) => (`
     <li class="film-details__comment">
@@ -21,8 +19,7 @@ const renderComment = (comment) => (`
 
 const renderComments = (list) => list.map((item) => renderComment(item)).join('');
 
-const createTemplate = (film) => {
-  const { filmInfo } = film;
+const createTemplate = (film, comments) => {
   const {
     title,
     alternativeTitle,
@@ -36,11 +33,12 @@ const createTemplate = (film) => {
     director,
     writers,
     actors,
-  } = filmInfo;
-  const comments = [];
-  for (let i = 0; i < COMMENTS_COUNT; i += 1) {
-    comments.push(createComment());
-  }
+    commentIds,
+  } = film;
+  const commentsCurrent = [];
+  commentIds.forEach((id) => {
+    commentsCurrent.push(comments.find((item) => item.id === id));
+  });
   return (`
     <section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -112,10 +110,10 @@ const createTemplate = (film) => {
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${ commentsCurrent.length }</span></h3>
 
             <ul class="film-details__comments-list">
-              ${ renderComments(comments) }
+              ${ renderComments(commentsCurrent) }
             </ul>
 
             <div class="film-details__new-comment">
@@ -162,7 +160,7 @@ export default class FilmDetails extends AbstractStatefulView {
   }
 
   get template() {
-    return createTemplate(this.film);
+    return createTemplate(this.film, this.comments);
   }
 
   setCloseHandler = (callback) => {
