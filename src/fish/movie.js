@@ -1,9 +1,11 @@
 import { getRandomItem, getRandomValue, getRandomArray } from '../helpers';
+import { nanoid } from 'nanoid';
 import data from './data.json';
 
 const { film, comment } = data;
 
 const createMovie = () => ({
+  id: nanoid(),
   commentIds: getRandomArray(comment.id),
   title: getRandomItem(film.title),
   alternativeTitle: getRandomItem(film.alternativeTitle),
@@ -20,6 +22,9 @@ const createMovie = () => ({
   runtime: getRandomValue(30, 130, 0),
   genre: getRandomArray(film.genre),
   description: getRandomItem(film.description),
+  isFavorite: false,
+  isWatched: false,
+  isInWatchlist: false,
 });
 
 const createMoviesList = (amount) => new Array(amount).fill(0).map(() => createMovie());

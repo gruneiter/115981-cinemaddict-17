@@ -1,47 +1,13 @@
 import Films from '../view/films';
-import FilmCard from '../view/film-card';
 import FilmsList from '../view/films-list';
-import FilmDetails from '../view/film-details';
 import ShowMore from '../view/show-more';
+import FilmPresenter from './film';
+import FilmDetailsPresenter from './film-details';
 
 import { MOVIES_COUNT, MOVIES_COUNT_ROW, MOVIES_COUNT_TOP } from '../constants';
+import { updateItem } from '../helpers.js';
 
 import { render } from '../render.js';
-
-const bodyElement = document.querySelector('body');
-
-const removeDetails = () => {
-  const detailsElement = document.querySelector('.film-details');
-  detailsElement.remove();
-  bodyElement.classList.remove('hide-overflow');
-};
-
-const closeOnEsc = (e) => {
-  e.preventDefault();
-  if (e.key === 'Escape' || e.key === 'Esc') {
-    document.removeEventListener('keydown', closeOnEsc);
-    removeDetails();
-  }
-};
-
-const showDetails = (details) => {
-  const oldDetailsElement = document.querySelector('.film-details');
-  if (oldDetailsElement) {
-    oldDetailsElement.remove();
-  }
-  details.setCloseHandler(removeDetails);
-  document.addEventListener('keydown', closeOnEsc);
-  bodyElement.classList.add('hide-overflow');
-  render(details, bodyElement);
-};
-
-const cardOpen = (film, movie, comments) => {
-  const linkElement = film.element.querySelector('.film-card__link');
-  linkElement.addEventListener('click', (e) => {
-    e.preventDefault();
-    showDetails(new FilmDetails(movie, comments));
-  });
-};
 
 export default class FilmsPresenter {
   #mainContainer;
@@ -52,13 +18,13 @@ export default class FilmsPresenter {
   #allMoviesTitle;
   #allMovies;
   #allMoviesContainerElement;
+  #filmDetails;
   #main = new Films();
   #topRated = new FilmsList({ name: 'Top rated' }, true);
   #mostCommented = new FilmsList({ name: 'Most commented' }, true);
-  #topRatedContainerElement = this.#topRated.element.querySelector('.films-list__container');
-  #mostCommentedContainerElement = this.#mostCommented.element.querySelector('.films-list__container');
   #moviesLoaded = Math.min(MOVIES_COUNT, MOVIES_COUNT_ROW);
   #showMoreElement = new ShowMore();
+  #filmPresenter = {};
 
   constructor(mainContainer, moviesModel, commentsModel) {
     this.#mainContainer = mainContainer;
@@ -69,41 +35,66 @@ export default class FilmsPresenter {
     this.#allMoviesTitle = this.#movies.length > 0 ? 'All movies. Upcoming' : 'There are no movies in our database';
     this.#allMovies = new FilmsList({ name: this.#allMoviesTitle, hidden: this.#movies.length > 0 });
     this.#allMoviesContainerElement = this.#allMovies.element.querySelector('.films-list__container');
+    this.#filmDetails = new FilmDetailsPresenter(this.#comments, this.#handleFilmChange);
   }
+
+  #renderFilm = (film, container, popup) => {
+    this.#filmPresenter[film.id] = this.#filmPresenter[film.id] || [];
+    const card = new FilmPresenter(container, popup, this.#handleFilmChange);
+    card.init(film);
+    this.#filmPresenter[film.id].push(card);
+  };
 
   #handleShowMoreButtonClick = () => {
     this.#movies
       .slice(this.#moviesLoaded, this.#moviesLoaded + MOVIES_COUNT_ROW)
-      .forEach((movie) => render(new FilmCard(movie), this.#allMoviesContainerElement));
+      .forEach((movie) => this.#renderFilm(movie, this.#allMoviesContainerElement));
     this.#moviesLoaded += MOVIES_COUNT_ROW;
     if (this.#moviesLoaded > MOVIES_COUNT) {
       this.#showMoreElement.element.remove();
     }
   };
 
-  init = () => {
-    render(this.#main, this.#mainContainer);
-    render(this.#allMovies, this.#main.element);
+  #handleFilmChange = (updatedFilm) => {
+    this.#movies = updateItem(this.#movies, updatedFilm);
+    this.#filmPresenter[updatedFilm.id].forEach((item) => item.init(updatedFilm));
+    if (this.#filmDetails.currentId) {
+      this.#filmDetails.init(updatedFilm);
+    }
+  };
+
+  #getContainer = (list) => list.element.querySelector('.films-list__container');
+
+  #renderMainContainer = () => render(this.#main, this.#mainContainer);
+
+  #renderLoadMore = () => {
+    render(this.#showMoreElement, this.#allMovies.element);
+    this.#showMoreElement.setClickHandler(this.#handleShowMoreButtonClick);
+  };
+
+  #renderMoviesList(list, container, count) {
+    for (let i = 0; i < count; i++) {
+      this.#renderFilm(list[i], container, this.#filmDetails);
+    }
+  }
+
+  #renderCategory = (category, list, count) => {
+    render(category, this.#main.element);
+    const listContainer = this.#getContainer(category);
+    this.#renderMoviesList(list, listContainer, count);
+  };
+
+  #renderAllMovies = () => {
+    this.#renderCategory(this.#allMovies, this.#movies, this.#moviesLoaded);
     if (this.#movies.length > this.#moviesLoaded) {
-      render(this.#showMoreElement, this.#allMovies.element);
-      this.#showMoreElement.setClickHandler(this.#handleShowMoreButtonClick);
+      this.#renderLoadMore();
     }
-    render(this.#topRated, this.#main.element);
-    render(this.#mostCommented, this.#main.element);
-    for (let i = 0; i < this.#moviesLoaded; i++) {
-      const film = new FilmCard(this.#movies[i]);
-      cardOpen(film, this.#movies[i], this.#comments);
-      render(film, this.#allMoviesContainerElement);
-    }
-    for (let i = 0; i < Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP); i++) {
-      const film = new FilmCard(this.#movies[i]);
-      cardOpen(film, this.#movies[i], this.#comments);
-      render(film, this.#topRatedContainerElement);
-    }
-    for (let i = 0; i < Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP); i++) {
-      const film = new FilmCard(this.#movies[i]);
-      cardOpen(film, this.#movies[i], this.#comments);
-      render(film, this.#mostCommentedContainerElement);
-    }
+  };
+
+  init = () => {
+    this.#renderMainContainer();
+    this.#renderAllMovies();
+    this.#renderCategory(this.#topRated, this.#movies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#mostCommented, this.#movies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
   };
 }

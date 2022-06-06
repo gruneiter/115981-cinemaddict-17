@@ -32,3 +32,17 @@ export const commentDate = (date) => dayjs(date).format('YYYY/M/D h:mm');
 
 export const numberFormat = (price) =>
   price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
