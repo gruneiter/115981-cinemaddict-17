@@ -1,4 +1,4 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import FilmAbstract from './film-abstract';
 
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
 
@@ -34,6 +34,9 @@ const createTemplate = (film, comments) => {
     writers,
     actors,
     commentIds,
+    isInWatchlist,
+    isWatched,
+    isFavorite,
   } = film;
   const commentsCurrent = [];
   commentIds.forEach((id) => {
@@ -102,9 +105,9 @@ const createTemplate = (film, comments) => {
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watchlist${ isInWatchlist ? ' film-details__control-button--active' : '' }" id="watchlist" name="watchlist" data-type="add">Add to watchlist</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watched${ isWatched ? ' film-details__control-button--active' : '' }" id="watched" name="watched" data-type="watched">Already watched</button>
+            <button type="button" class="film-details__control-button film-details__control-button--favorite${ isFavorite ? ' film-details__control-button--active' : '' }" id="favorite" name="favorite" data-type="favorite">Add to favorites</button>
           </section>
         </div>
 
@@ -152,26 +155,39 @@ const createTemplate = (film, comments) => {
   `);
 };
 
-export default class FilmDetails extends AbstractStatefulView {
-  constructor(film, comments) {
-    super();
-    this.film = film;
+export default class FilmDetails extends FilmAbstract {
+  constructor(_film, comments) {
+    super(_film);
     this.comments = comments;
-  }
-
-  get template() {
-    return createTemplate(this.film, this.comments);
+    this._buttons = this.element.querySelector('.film-details__controls');
   }
 
   setCloseHandler = (callback) => {
-    this._callback.click = callback;
+    this._callback.closeClick = callback;
     this.element.addEventListener('click', this.#closeHandler);
   };
 
   #closeHandler = (e) => {
     if (e.target.classList.contains('film-details__close-btn')) {
       e.preventDefault();
-      this._callback.click();
+      this._callback.closeClick();
     }
   };
+
+  setEscHandler = (callback) => {
+    this._callback.escPress = callback;
+    document.addEventListener('keydown', this.#escHandler);
+  };
+
+  #escHandler = (e) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      e.preventDefault();
+      this._callback.escPress();
+      document.removeEventListener('keydown', this.#escHandler);
+    }
+  };
+
+  get template() {
+    return createTemplate(this._film, this.comments);
+  }
 }
