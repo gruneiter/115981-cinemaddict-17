@@ -1,13 +1,14 @@
 import Films from '../view/films';
 import FilmsList from '../view/films-list';
 import ShowMore from '../view/show-more';
+import Sort from '../view/sort';
 import FilmPresenter from './film';
 import FilmDetailsPresenter from './film-details';
 
-import { MOVIES_COUNT, MOVIES_COUNT_ROW, MOVIES_COUNT_TOP } from '../constants';
-import { updateItem } from '../helpers.js';
+import {MOVIES_COUNT, MOVIES_COUNT_ROW, MOVIES_COUNT_TOP, SortType} from '../constants';
+import {sortByCommentsCount, sortByDate, sortByRating, updateItem} from '../helpers.js';
 
-import { render } from '../render.js';
+import { render, remove } from '../framework/render.js';
 
 export default class FilmsPresenter {
   #mainContainer;
@@ -18,6 +19,8 @@ export default class FilmsPresenter {
   #allMoviesTitle;
   #allMovies;
   #allMoviesContainerElement;
+  #topRatedMovies;
+  #mostCommentedMovies;
   #filmDetails;
   #main = new Films();
   #topRated = new FilmsList({ name: 'Top rated' }, true);
@@ -25,6 +28,26 @@ export default class FilmsPresenter {
   #moviesLoaded = Math.min(MOVIES_COUNT, MOVIES_COUNT_ROW);
   #showMoreElement = new ShowMore();
   #filmPresenter = {};
+  #sortComponent = new Sort();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedFilms = [];
+
+  #sortFilms = (sortType) => {
+    switch (sortType) {
+      case SortType.DATE:
+        this.#movies.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this.#movies.sort(sortByRating);
+        break;
+      case SortType.COMMENTS:
+        this.#movies.sort(sortByCommentsCount);
+        break;
+      default:
+        this.#movies = [...this.#sourcedFilms];
+    }
+    this.#currentSortType = sortType;
+  };
 
   constructor(mainContainer, moviesModel, commentsModel) {
     this.#mainContainer = mainContainer;
@@ -34,9 +57,27 @@ export default class FilmsPresenter {
     this.#comments = Array.from(this.#commentsModel.comments);
     this.#allMoviesTitle = this.#movies.length > 0 ? 'All movies. Upcoming' : 'There are no movies in our database';
     this.#allMovies = new FilmsList({ name: this.#allMoviesTitle, hidden: this.#movies.length > 0 });
+
     this.#allMoviesContainerElement = this.#allMovies.element.querySelector('.films-list__container');
     this.#filmDetails = new FilmDetailsPresenter(this.#comments, this.#handleFilmChange);
   }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    this.#clearMoviesList();
+    this.#renderAllMovies();
+    this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#mainContainer, 'afterbegin');
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  };
 
   #renderFilm = (film, container, popup) => {
     this.#filmPresenter[film.id] = this.#filmPresenter[film.id] || [];
@@ -91,10 +132,28 @@ export default class FilmsPresenter {
     }
   };
 
+  #clearMoviesList = () => {
+    Object.values(this.#filmPresenter).forEach((presenter) => {
+      presenter.forEach((item) => item.destroy());
+    });
+    this.#filmPresenter = {};
+    this.#moviesLoaded = MOVIES_COUNT_ROW;
+    remove(this.#showMoreElement);
+  };
+
   init = () => {
+    this.#sourcedFilms = [...this.#movies];
+
+    this.#sortFilms(SortType.RATING);
+    this.#topRatedMovies = [...this.#movies].slice(0, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#sortFilms(SortType.COMMENTS);
+    this.#mostCommentedMovies = [...this.#movies].slice(0, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#sortFilms(SortType.DEFAULT);
+
     this.#renderMainContainer();
+    this.#renderSort();
     this.#renderAllMovies();
-    this.#renderCategory(this.#topRated, this.#movies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
-    this.#renderCategory(this.#mostCommented, this.#movies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
   };
 }
