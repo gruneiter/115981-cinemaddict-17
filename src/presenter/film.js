@@ -18,6 +18,8 @@ export default class FilmPresenter {
   #handleWatchedClick = () => this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
   #handleFavoriteClick = () => this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
 
+  destroy = () => remove(this.#card);
+
   init = (film) => {
     const prevCard = this.#card;
     this.#film = film;

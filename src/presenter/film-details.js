@@ -31,11 +31,7 @@ export default class FilmDetailsPresenter {
 
   get currentId() {
     const isOpen = this.#filmDetails ? this.#filmDetails.element.parentNode.classList.contains('hide-overflow') : false;
-    if (this.#filmDetails) {
-      return isOpen ? this.#film.id : false;
-    } else {
-      return false;
-    }
+    return (this.#filmDetails && isOpen) ? this.#film.id : false;
   }
 
   init = (film) => {

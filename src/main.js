@@ -1,5 +1,3 @@
-import { render } from './render.js';
-import Sort from './view/sort';
 import FilmsPresenter from './presenter/films';
 import MovieModel from './model/movie';
 import CommentModel from './model/comment';
@@ -21,7 +19,6 @@ const profile = new UserPresenter(user);
 const navigation = new MainNavigationPresenter(user, mainElement);
 const footer = new FooterPresenter(getRandomNumber(0, 1000000), footerElement);
 
-render(new Sort(), mainElement);
 films.init();
 profile.init();
 navigation.init();

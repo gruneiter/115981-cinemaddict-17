@@ -46,3 +46,31 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+export const sortByDate = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.release.date, filmB.release.date);
+  return weight ?? dayjs(filmB.release.date).diff(dayjs(filmA.release.date));
+};
+
+export const sortByRating = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.totalRating, filmB.totalRating);
+  return weight ?? filmB.totalRating - filmA.totalRating;
+};
+
+export const sortByCommentsCount = (filmA, filmB) => filmB.commentIds.length - filmA.commentIds.length;
