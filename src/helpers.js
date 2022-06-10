@@ -1,4 +1,9 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 export const getRandomNumber = (minValue, maxValue) =>  Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
 
@@ -15,8 +20,8 @@ export const getRandomValue = (minValue, maxValue, range) => {
 };
 
 export const getTimeFromMinutes = (mins) => {
-  const hours = Math.trunc(mins/60);
-  const minutes = mins % 60;
+  const hours = dayjs.duration(mins, 'minutes').hours();
+  const minutes = dayjs.duration(mins, 'minutes').minutes();
 
   if (hours) {
     return `${hours}h ${minutes}m`;
@@ -28,7 +33,7 @@ export const cutDescription = (string) => `${string.substr(0, 140)}…`;
 
 export const filmDate = (date) => dayjs(date).format('D MMMM YYYY');
 
-export const commentDate = (date) => dayjs(date).format('YYYY/M/D h:mm');
+export const commentDate = (date) => dayjs(date).fromNow();
 
 export const numberFormat = (price) =>
   price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
