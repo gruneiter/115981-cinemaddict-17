@@ -16,7 +16,7 @@ const createTemplate = (rating) => (`
     </section>
   `);
 
-export default class Profile extends AbstractStatefulView {
+export default class ProfileView extends AbstractStatefulView {
   constructor(rating) {
     super();
     this.rating = rating;

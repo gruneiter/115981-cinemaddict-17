@@ -8,7 +8,7 @@ const createTemplate = () => (`
     </ul>
    `);
 
-export default class Sort extends AbstractStatefulView {
+export default class SortView extends AbstractStatefulView {
   get template() {
     return createTemplate();
   }

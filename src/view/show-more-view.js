@@ -2,7 +2,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = () => ('<button class="films-list__show-more">Show more</button>');
 
-export default class ShowMore extends AbstractStatefulView {
+export default class ShowMoreView extends AbstractStatefulView {
   get template() {
     return createTemplate();
   }

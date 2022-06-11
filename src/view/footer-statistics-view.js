@@ -7,7 +7,7 @@ const createTemplate = (stats) => (`
     </section>
   `);
 
-export default class FooterStatistics extends AbstractStatefulView {
+export default class FooterStatisticsView extends AbstractStatefulView {
   #stats;
 
   constructor(stats = 0) {

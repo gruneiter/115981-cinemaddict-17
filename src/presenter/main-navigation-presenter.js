@@ -1,5 +1,5 @@
 import { render } from '../render.js';
-import MainNavigation from '../view/main-navigation';
+import MainNavigationView from '../view/main-navigation-view';
 
 export default class MainNavigationPresenter {
   #element;
@@ -15,6 +15,6 @@ export default class MainNavigationPresenter {
   }
 
   init() {
-    render(new MainNavigation(this.#values), this.#element, 'beforebegin');
+    render(new MainNavigationView(this.#values), this.#element, 'beforebegin');
   }
 }

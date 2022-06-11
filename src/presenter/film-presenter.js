@@ -1,5 +1,5 @@
 import {render, replace, remove} from '../framework/render';
-import FilmCard from '../view/film-card';
+import FilmCardView from '../view/film-card-view';
 
 export default class FilmPresenter {
   #container;
@@ -23,7 +23,7 @@ export default class FilmPresenter {
   init = (film) => {
     const prevCard = this.#card;
     this.#film = film;
-    this.#card = new FilmCard(film);
+    this.#card = new FilmCardView(film);
 
     this.#card.setLinkClickHandler(() => this.#popup.init(film));
 

@@ -1,9 +1,9 @@
-import Films from '../view/films';
-import FilmsList from '../view/films-list';
-import ShowMore from '../view/show-more';
-import Sort from '../view/sort';
-import FilmPresenter from './film';
-import FilmDetailsPresenter from './film-details';
+import FilmsView from '../view/films-view';
+import FilmsListView from '../view/films-list-view';
+import ShowMoreView from '../view/show-more-view';
+import SortView from '../view/sort-view';
+import FilmPresenter from './film-presenter';
+import FilmDetailsPresenter from './film-details-presenter';
 
 import {MOVIES_COUNT, MOVIES_COUNT_ROW, MOVIES_COUNT_TOP, SortType} from '../constants';
 import {sortByCommentsCount, sortByDate, sortByRating, updateItem} from '../helpers.js';
@@ -22,13 +22,13 @@ export default class FilmsPresenter {
   #topRatedMovies;
   #mostCommentedMovies;
   #filmDetails;
-  #main = new Films();
-  #topRated = new FilmsList({ name: 'Top rated' }, true);
-  #mostCommented = new FilmsList({ name: 'Most commented' }, true);
+  #main = new FilmsView();
+  #topRated = new FilmsListView({ name: 'Top rated' }, true);
+  #mostCommented = new FilmsListView({ name: 'Most commented' }, true);
   #moviesLoaded = Math.min(MOVIES_COUNT, MOVIES_COUNT_ROW);
-  #showMoreElement = new ShowMore();
+  #showMoreElement = new ShowMoreView();
   #filmPresenter = {};
-  #sortComponent = new Sort();
+  #sortComponent = new SortView();
   #currentSortType = SortType.DEFAULT;
   #sourcedFilms = [];
 
@@ -56,7 +56,7 @@ export default class FilmsPresenter {
     this.#movies = Array.from(this.#moviesModel.movies);
     this.#comments = Array.from(this.#commentsModel.comments);
     this.#allMoviesTitle = this.#movies.length > 0 ? 'All movies. Upcoming' : 'There are no movies in our database';
-    this.#allMovies = new FilmsList({ name: this.#allMoviesTitle, hidden: this.#movies.length > 0 });
+    this.#allMovies = new FilmsListView({ name: this.#allMoviesTitle, hidden: this.#movies.length > 0 });
 
     this.#allMoviesContainerElement = this.#allMovies.element.querySelector('.films-list__container');
     this.#filmDetails = new FilmDetailsPresenter(this.#comments, this.#handleFilmChange);

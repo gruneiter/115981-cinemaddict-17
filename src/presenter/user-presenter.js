@@ -1,5 +1,5 @@
 import { render } from '../render.js';
-import Profile from '../view/profile';
+import ProfileView from '../view/profile-view';
 
 export default class UserPresenter {
   #rating;
@@ -10,7 +10,7 @@ export default class UserPresenter {
 
   init() {
     if (this.#rating > 0) {
-      render(new Profile(this.#rating), this.#headerElement);
+      render(new ProfileView(this.#rating), this.#headerElement);
     }
   }
 }

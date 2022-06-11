@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
-export default class FilmAbstract extends AbstractStatefulView {
+export default class FilmAbstractView extends AbstractStatefulView {
   constructor(film) {
     super();
     this._film = film;

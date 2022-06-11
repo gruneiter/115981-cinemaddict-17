@@ -9,7 +9,7 @@ const createTemplate = (values) => (`
    </nav>
    `);
 
-export default class MainNavigation extends AbstractStatefulView {
+export default class MainNavigationView extends AbstractStatefulView {
   #values;
   constructor(values) {
     super();

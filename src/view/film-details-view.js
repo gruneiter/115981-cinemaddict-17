@@ -1,4 +1,4 @@
-import FilmAbstract from './film-abstract';
+import FilmAbstractView from './film-abstract-view';
 
 import { commentDate, filmDate, getTimeFromMinutes } from '../helpers';
 
@@ -158,7 +158,7 @@ const createTemplate = (data) => {
   `);
 };
 
-export default class FilmDetails extends FilmAbstract {
+export default class FilmDetailsView extends FilmAbstractView {
   _state = null;
 
   constructor(_film, comments) {

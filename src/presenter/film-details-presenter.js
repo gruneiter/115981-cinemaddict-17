@@ -1,4 +1,4 @@
-import FilmDetails from '../view/film-details';
+import FilmDetailsView from '../view/film-details-view';
 import {render, remove} from '../framework/render';
 
 export default class FilmDetailsPresenter {
@@ -42,7 +42,7 @@ export default class FilmDetailsPresenter {
     if (this.#prevFilmDetails && this.#film.id === this.#prevFilm.id) {
       this.#prevFilmDetails.updateDetails({ film: this.#film, comments: this.#comments });
     } else {
-      this.#filmDetails = new FilmDetails(film, this.#comments);
+      this.#filmDetails = new FilmDetailsView(film, this.#comments);
       this.#filmDetails.setCloseHandler(this.#removeDetails);
       this.#filmDetails.setEscHandler(this.#removeDetails);
       this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);

@@ -1,11 +1,11 @@
-import FilmsPresenter from './presenter/films';
-import MovieModel from './model/movie';
-import CommentModel from './model/comment';
+import FilmsPresenter from './presenter/films-presenter';
+import MovieModel from './model/movies-model';
+import CommentModel from './model/comments-model';
 import { MOVIES_COUNT } from './constants';
-import UserModel from './model/user';
-import UserPresenter from './presenter/user';
-import MainNavigationPresenter from './presenter/main-navigation';
-import FooterPresenter from './presenter/footer';
+import UserModel from './model/user-model';
+import UserPresenter from './presenter/user-presenter';
+import MainNavigationPresenter from './presenter/main-navigation-presenter';
+import FooterPresenter from './presenter/footer-presenter';
 
 import {getRandomNumber} from './helpers';
 

@@ -1,9 +1,11 @@
 import createMoviesList from '../fish/movie';
+import Observable from '../framework/observable';
 
-export default class MovieModel {
+export default class MovieModel extends Observable{
   #movies;
 
   constructor(amount) {
+    super();
     this.#movies = createMoviesList(amount);
   }
 
