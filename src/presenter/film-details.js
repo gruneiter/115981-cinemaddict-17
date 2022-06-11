@@ -7,6 +7,7 @@ export default class FilmDetailsPresenter {
   #film;
   #filmDetails = null;
   #prevFilmDetails;
+  #prevFilm;
 
   constructor(comments, changeData) {
     this.#comments = comments;
@@ -35,17 +36,22 @@ export default class FilmDetailsPresenter {
   }
 
   init = (film) => {
+    this.#prevFilm = this.#film;
     this.#film = film;
     this.#prevFilmDetails = this.#filmDetails;
-    this.#filmDetails = new FilmDetails(film, this.#comments);
-    this.#filmDetails.setCloseHandler(this.#removeDetails);
-    this.#filmDetails.setEscHandler(this.#removeDetails);
-    this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);
-    this.#filmDetails.setWatchedClickHandler(this.#handleWatchedClick);
-    this.#filmDetails.setFavoriteClickHandler(this.#handleFavoriteClick);
-    if (this.#prevFilmDetails) {
-      remove(this.#prevFilmDetails);
+    if (this.#prevFilmDetails && this.#film.id === this.#prevFilm.id) {
+      this.#prevFilmDetails.updateDetails({ film: this.#film, comments: this.#comments });
+    } else {
+      this.#filmDetails = new FilmDetails(film, this.#comments);
+      this.#filmDetails.setCloseHandler(this.#removeDetails);
+      this.#filmDetails.setEscHandler(this.#removeDetails);
+      this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);
+      this.#filmDetails.setWatchedClickHandler(this.#handleWatchedClick);
+      this.#filmDetails.setFavoriteClickHandler(this.#handleFavoriteClick);
+      if (this.#prevFilmDetails) {
+        remove(this.#prevFilmDetails);
+      }
+      this.#showDetails();
     }
-    this.#showDetails();
   };
 }
