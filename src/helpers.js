@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
+import { FilterType } from './constants';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+
+export const getRandomBool = () => Math.random() < 0.5;
 
 export const getRandomNumber = (minValue, maxValue) =>  Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
 
@@ -79,3 +82,10 @@ export const sortByRating = (filmA, filmB) => {
 };
 
 export const sortByCommentsCount = (filmA, filmB) => filmB.commentIds.length - filmA.commentIds.length;
+
+export const filter = {
+  [FilterType.ALL]: (films) => films,
+  [FilterType.WATCH_LIST]: (films) => films.filter((film) => film.isInWatchlist),
+  [FilterType.ALREADY_WATCHED]: (films) => films.filter((film) => film.isWatched),
+  [FilterType.FAVORITE]: (films) => films.filter((film) => film.isFavorite),
+};
