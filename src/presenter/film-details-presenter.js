@@ -1,17 +1,21 @@
+import CommentPresenter from '../presenter/comments-presenter';
 import FilmDetailsView from '../view/film-details-view';
 import {render, remove} from '../framework/render';
 import {UpdateType, UserAction} from '../constants';
 
 export default class FilmDetailsPresenter {
   #commentsModel;
+  #commentPresenter;
   #changeData;
   #film;
   #filmDetails = null;
   #prevFilmDetails;
   #prevFilm;
+  #moviesModel;
 
-  constructor(comments, changeData) {
+  constructor(comments, moviesModel, changeData) {
     this.#commentsModel = comments;
+    this.#moviesModel = moviesModel;
     this.#changeData = changeData;
     this.#commentsModel.addObserver(this.#handleModelEvent);
   }
@@ -53,6 +57,8 @@ export default class FilmDetailsPresenter {
   #showDetails = () => {
     this.#bodyElement.classList.add('hide-overflow');
     render(this.#filmDetails, this.#bodyElement);
+    this.#commentPresenter = new CommentPresenter(this.#moviesModel, this.#commentsModel);
+    this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film.commentIds, this.#film);
   };
 
   #removeDetails = () => {
@@ -71,6 +77,7 @@ export default class FilmDetailsPresenter {
     this.#prevFilmDetails = this.#filmDetails;
     if (this.#prevFilmDetails && this.#film.id === this.#prevFilm.id) {
       this.#prevFilmDetails.updateDetails({ film: this.#film, comments: this.#commentsModel.comments });
+      this.#commentPresenter.init(this.#prevFilmDetails.element.querySelector('.film-details__bottom-container'), this.#film.commentIds, this.#film);
     } else {
       this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);
       this.#filmDetails.setCloseHandler(this.#removeDetails);

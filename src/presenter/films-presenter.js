@@ -51,7 +51,7 @@ export default class FilmsPresenter {
     this.#sortModel = sortModel;
     this.#filterModel = filterModel;
     this.#movies = this.movies;
-    this.#filmDetails = new FilmDetailsPresenter(this.#commentsModel, this.#handleViewAction);
+    this.#filmDetails = new FilmDetailsPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction);
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);

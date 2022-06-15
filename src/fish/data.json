@@ -4,7 +4,7 @@
     "dateComment": "2019-05-16T00:00:00.000Z",
     "author": ["Michael", "Gabriel", "Raphael", "Uriel"],
     "date": "2019-05-11T16:12:32.554Z",
-    "id": [4, 8, 15, 16, 23, 42],
+    "id": [ "4", "8", "15", "16", "23", "42" ],
     "comment": [
       "Cras aliquet varius magna, non porta ligula feugiat eget.",
       "Fusce tristique felis at fermentum pharetra.",
