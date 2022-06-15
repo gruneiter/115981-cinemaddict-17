@@ -1,4 +1,4 @@
-import { getRandomItem, getRandomValue, getRandomArray } from '../helpers';
+import { getRandomBool, getRandomItem, getRandomValue, getRandomArray } from '../helpers';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import dayjsRandom from 'dayjs-random';
@@ -26,9 +26,9 @@ const createMovie = () => ({
   runtime: getRandomValue(30, 130, 0),
   genre: getRandomArray(film.genre),
   description: getRandomItem(film.description),
-  isFavorite: false,
-  isWatched: false,
-  isInWatchlist: false,
+  isFavorite: getRandomBool(),
+  isWatched: getRandomBool(),
+  isInWatchlist: getRandomBool(),
 });
 
 const createMoviesList = (amount) => new Array(amount).fill(0).map(() => createMovie());

@@ -10,7 +10,7 @@ const createTemplate = (title, extra) => (`
   `);
 
 
-export default class FilmsList extends AbstractStatefulView {
+export default class FilmsListView extends AbstractStatefulView {
   #title;
   #extra;
 

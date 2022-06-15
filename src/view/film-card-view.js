@@ -1,4 +1,4 @@
-import FilmAbstract from './film-abstract';
+import FilmAbstractView from './film-abstract-view';
 
 import { filmDate, getTimeFromMinutes, cutDescription } from '../helpers';
 
@@ -27,7 +27,7 @@ const createTemplate = (film) => {
    `);
 };
 
-export default class FilmCard extends FilmAbstract {
+export default class FilmCardView extends FilmAbstractView {
   constructor(_film) {
     super(_film);
     this._buttons = this.element.querySelector('.film-card__controls');

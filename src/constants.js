@@ -8,3 +8,22 @@ export const SortType = {
   RATING: 'rating',
   COMMENTS: 'comments',
 };
+
+export const UserAction = {
+  UPDATE_FILM: 'update film',
+  ADD_COMMENT: 'add comment',
+  DELETE_COMMENT: 'delete comment',
+};
+
+export const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};
+
+export const FilterType = {
+  ALL: 'all',
+  WATCH_LIST:'watchlist',
+  ALREADY_WATCHED:'history',
+  FAVORITE:'favorites',
+};
