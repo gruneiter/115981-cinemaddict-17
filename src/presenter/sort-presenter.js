@@ -6,6 +6,7 @@ export default class SortPresenter {
   #sortComponent = null;
   #container;
   #sortModel;
+  #isActive = true;
 
   constructor(container, sortModel) {
     this.#container = container;
@@ -23,6 +24,7 @@ export default class SortPresenter {
   };
 
   #handleModelEvent = () => {
+    this.#isActive = this.#sortModel.active;
     this.init();
   };
 
@@ -35,6 +37,11 @@ export default class SortPresenter {
   };
 
   init = () => {
-    this.#renderSort();
+    if (this.#sortComponent) {
+      remove(this.#sortComponent);
+    }
+    if (this.#isActive) {
+      this.#renderSort();
+    }
   };
 }

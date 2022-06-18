@@ -13,8 +13,6 @@ import MoviesApiService from './movies-api-service.js';
 const AUTHORIZATION = 'Basic MzjPWWRdmAVwhJuz';
 const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
 
-import {getRandomNumber} from './helpers';
-
 const mainElement = document.querySelector('.main');
 const footerElement = document.querySelector('.footer');
 const moviesModel = new MovieModel(new MoviesApiService(END_POINT, AUTHORIZATION));
@@ -25,7 +23,7 @@ const filterModel = new FilterModel();
 const films = new FilmsPresenter(mainElement, moviesModel, commentsModel, sortModel, filterModel);
 const profile = new UserPresenter(moviesModel);
 const navigation = new MainNavigationPresenter(moviesModel, filterModel, mainElement);
-const footer = new FooterPresenter(getRandomNumber(0, 1000000), footerElement);
+const footer = new FooterPresenter(moviesModel, footerElement);
 const sort = new SortPresenter(mainElement, sortModel);
 
 films.init();

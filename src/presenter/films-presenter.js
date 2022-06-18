@@ -6,7 +6,6 @@ import FilmDetailsPresenter from './film-details-presenter';
 
 import {
   FilterType,
-  MOVIES_COUNT,
   MOVIES_COUNT_ROW,
   MOVIES_COUNT_TOP,
   SortType,
@@ -31,7 +30,7 @@ export default class FilmsPresenter {
   #main = new FilmsView();
   #topRated = new FilmsListView({ name: 'Top rated' }, true);
   #mostCommented = new FilmsListView({ name: 'Most commented' }, true);
-  #moviesLoaded = Math.min(MOVIES_COUNT, MOVIES_COUNT_ROW);
+  #moviesLoaded = null;
   #showMoreElement = new ShowMoreView();
   #filmPresenter = {};
   #sortModel;
@@ -100,6 +99,7 @@ export default class FilmsPresenter {
     const films = this.#moviesModel.movies;
     const filteredFilms = filter[filterType](films);
     this.#setSortType(this.#sortModel.sort);
+    this.#sortModel.setActive(filteredFilms.length);
     switch (this.#currentSortType) {
       case SortType.DATE:
         return filteredFilms.sort(sortByDate);
@@ -155,8 +155,9 @@ export default class FilmsPresenter {
   };
 
   #renderAllMovies = () => {
+    this.#moviesLoaded = Math.min(this.movies.length, MOVIES_COUNT_ROW);
     this.#allMoviesTitle = this.#isLoading ? 'Loading...' : 'All movies. Upcoming';
-    this.#allMoviesTitle = this.movies.length < 0 && !this.#isLoading ? this.#allMoviesEmptyTitlesList[this.#filterModel.filter] : this.#allMoviesTitle;
+    this.#allMoviesTitle = this.movies.length === 0 && !this.#isLoading ? this.#allMoviesEmptyTitlesList[this.#filterModel.filter] : this.#allMoviesTitle;
     this.#allMovies = new FilmsListView({ name: this.#allMoviesTitle, hidden: this.movies.length > 0 });
     this.#allMoviesContainerElement = this.#allMovies.element.querySelector('.films-list__container');
     this.#renderCategory(this.#allMovies, this.movies, this.#moviesLoaded, 'afterbegin');
@@ -167,7 +168,6 @@ export default class FilmsPresenter {
 
   #clearAllMoviesList = ({resetRenderedTaskCount = false, resetSortType = false} = {}) => {
     const moviesCount = this.movies.length;
-
     remove(this.#allMovies);
 
     if (resetRenderedTaskCount) {
@@ -182,9 +182,9 @@ export default class FilmsPresenter {
 
   init = () => {
     this.#sortModel.setSort(UpdateType.NONE, SortType.RATING);
-    this.#topRatedMovies = [...this.movies].slice(0, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#topRatedMovies = [...this.movies].slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
     this.#sortModel.setSort(UpdateType.NONE, SortType.COMMENTS);
-    this.#mostCommentedMovies = [...this.movies].slice(0, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#mostCommentedMovies = [...this.movies].slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
     this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
 
     this.#renderMainContainer();
@@ -192,7 +192,7 @@ export default class FilmsPresenter {
     if (this.#isLoading) {
       return;
     }
-    this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
-    this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(MOVIES_COUNT, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
   };
 }
