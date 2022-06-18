@@ -75,20 +75,16 @@ export default class FilmDetailsPresenter {
     this.#prevFilm = this.#film;
     this.#film = film;
     this.#prevFilmDetails = this.#filmDetails;
-    if (this.#prevFilmDetails && this.#film.id === this.#prevFilm.id) {
-      this.#prevFilmDetails.updateDetails({ film: this.#film, comments: this.#commentsModel.comments });
-      this.#commentPresenter.init(this.#prevFilmDetails.element.querySelector('.film-details__bottom-container'), this.#film.commentIds, this.#film);
-    } else {
-      this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);
-      this.#filmDetails.setCloseHandler(this.#removeDetails);
-      this.#filmDetails.setEscHandler(this.#removeDetails);
-      this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);
-      this.#filmDetails.setWatchedClickHandler(this.#handleWatchedClick);
-      this.#filmDetails.setFavoriteClickHandler(this.#handleFavoriteClick);
-      if (this.#prevFilmDetails) {
-        remove(this.#prevFilmDetails);
-      }
-      this.#showDetails();
+    if (this.#prevFilmDetails) {
+      remove(this.#prevFilmDetails);
     }
+    this.#commentsModel.init(this.#film);
+    this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);
+    this.#filmDetails.setCloseHandler(this.#removeDetails);
+    this.#filmDetails.setEscHandler(this.#removeDetails);
+    this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);
+    this.#filmDetails.setWatchedClickHandler(this.#handleWatchedClick);
+    this.#filmDetails.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#showDetails();
   };
 }

@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render';
 import CommentsView from '../view/comments-view';
-import { UserAction } from '../constants';
+import {UpdateType, UserAction} from '../constants';
 
 export default class CommentPresenter {
   #commentsContainer = null;
@@ -14,9 +14,10 @@ export default class CommentPresenter {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#moviesModel.addObserver(this.#handleModelChange);
+    this.#commentsModel.addObserver(this.#handleModelChange);
   }
 
-  init(commentsContainer, commentIds, film, ) {
+  init(commentsContainer, commentIds, film) {
     this.#commentsContainer = commentsContainer;
     this.#commentIds = commentIds;
     const prevCommentsComponent = this.#commentsComponent;
@@ -34,8 +35,12 @@ export default class CommentPresenter {
     remove(prevCommentsComponent);
   }
 
-  #handleModelChange = (updateType, update) => {
-    this.init(this.#commentsContainer, update.commentIds, this.#film, this.#commentsModel);
+  #handleModelChange = (updateType) => {
+    switch (updateType) {
+      case UpdateType.INIT:
+        this.init(this.#commentsContainer, this.#commentIds, this.#film, this.#commentsModel);
+        break;
+    }
   };
 
   #handleViewAction = (actionType, updateType, update) => {

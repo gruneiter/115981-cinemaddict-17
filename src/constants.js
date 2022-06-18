@@ -16,9 +16,11 @@ export const UserAction = {
 };
 
 export const UpdateType = {
+  NONE: 'none',
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',
+  INIT: 'init',
 };
 
 export const FilterType = {

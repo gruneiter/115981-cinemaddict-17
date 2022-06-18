@@ -12,9 +12,10 @@ export default class UserPresenter {
     this.#moviesModel.addObserver(this.#handleModelEvent);
   }
 
-  #removeProfile = () => remove(this.#profileComponent);
-
   #renderProfile = () => {
+    if (this.#profileComponent) {
+      remove(this.#profileComponent);
+    }
     this.#rating = this.#moviesModel.movies.filter((movie) => movie.isWatched).length;
     if (this.#rating > 0) {
       this.#profileComponent = new ProfileView(this.#rating);
@@ -22,10 +23,7 @@ export default class UserPresenter {
     }
   };
 
-  #handleModelEvent = () => {
-    this.#removeProfile();
-    this.#renderProfile();
-  };
+  #handleModelEvent = () => this.#renderProfile();
 
   init() {
     this.#renderProfile();
