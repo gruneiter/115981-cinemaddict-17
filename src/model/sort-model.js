@@ -3,10 +3,19 @@ import {SortType} from '../constants.js';
 
 export default class SortModel extends Observable {
   #sort = SortType.DEFAULT;
+  #active = true;
 
   get sort() {
     return this.#sort;
   }
+
+  get active() {
+    return this.#active;
+  }
+
+  setActive = (state) => {
+    this.#active = !!state;
+  };
 
   setSort = (updateType, sort) => {
     this.#sort = sort;

@@ -1,20 +1,29 @@
-import createComment from '../fish/comment';
-import data from '../fish/data.json';
 import Observable from '../framework/observable';
-
-const { id } = data.comment;
+import {UpdateType} from '../constants';
 
 export default class CommentModel extends Observable {
   #comments = [];
+  #moviesApiService = null;
+  #movie = null;
 
-  constructor() {
+  constructor(moviesApiService) {
     super();
-    id.forEach((i) => this.#comments.push(createComment(i)));
+    this.#moviesApiService = moviesApiService;
   }
 
   get comments() {
     return this.#comments;
   }
+
+  init = async (movie) => {
+    this.#movie = movie;
+    try {
+      this.#comments = await this.#moviesApiService.getComments(movie);
+    } catch(err) {
+      this.#comments = [];
+    }
+    this._notify(UpdateType.INIT, this.#comments);
+  };
 
   addComment = (updateType, updatedComment) => {
     this.#comments = [
