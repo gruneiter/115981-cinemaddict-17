@@ -17,28 +17,40 @@ export default class FilmPresenter {
     this.#filterModel = filterModel;
   }
 
-  #handleAddClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      this.#filterModel.filter === 'watchlist' ? UpdateType.MINOR : UpdateType.PATCH,
-      {...this.#film, isInWatchlist: !this.#film.isInWatchlist},
-    );
+  #handleAddClick = async () => {
+    try {
+      await this.#changeData(
+        UserAction.UPDATE_FILM,
+        this.#filterModel.filter === 'watchlist' ? UpdateType.MINOR : UpdateType.PATCH,
+        {...this.#film, isInWatchlist: !this.#film.isInWatchlist},
+      );
+    } catch (err) {
+      this.#card.shake();
+    }
   };
 
-  #handleWatchedClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      this.#filterModel.filter === 'history' ? UpdateType.MINOR : UpdateType.PATCH,
-      {...this.#film, isWatched: !this.#film.isWatched},
-    );
+  #handleWatchedClick = async () => {
+    try {
+      await this.#changeData(
+        UserAction.UPDATE_FILM,
+        this.#filterModel.filter === 'history' ? UpdateType.MINOR : UpdateType.PATCH,
+        {...this.#film, isWatched: !this.#film.isWatched},
+      );
+    } catch (err) {
+      this.#card.shake();
+    }
   };
 
-  #handleFavoriteClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      this.#filterModel.filter === 'favorites' ? UpdateType.MINOR : UpdateType.PATCH,
-      {...this.#film, isFavorite: !this.#film.isFavorite},
-    );
+  #handleFavoriteClick = async () => {
+    try {
+      await this.#changeData(
+        UserAction.UPDATE_FILM,
+        this.#filterModel.filter === 'favorites' ? UpdateType.MINOR : UpdateType.PATCH,
+        {...this.#film, isFavorite: !this.#film.isFavorite},
+      );
+    } catch (err) {
+      this.#card.shake();
+    }
   };
 
   destroy = () => remove(this.#card);

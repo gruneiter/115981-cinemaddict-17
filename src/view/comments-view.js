@@ -1,28 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import he from 'he';
-import {nanoid} from 'nanoid';
-import { commentDate } from '../helpers';
 import {UpdateType, UserAction} from '../constants';
 
 const updateCommentEmoji = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">` : '';
-
-const renderComment = (comment) => (`
-  <li class="film-details__comment">
-    <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
-    </span>
-    <div>
-      <p class="film-details__comment-text">${comment.comment}</p>
-      <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${comment.author}</span>
-        <span class="film-details__comment-day">${commentDate(comment.date)}</span>
-        <button class="film-details__comment-delete" data-comment-id= '${ comment.id }'>Delete</button>
-      </p>
-    </div>
-  </li>`
-);
-
-const renderComments = (list) => list.map((item) => renderComment(item)).join('');
 
 const createTemplate = (data) => {
   const {commentIds, selectedEmoji} = data;
@@ -36,7 +16,6 @@ const createTemplate = (data) => {
     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${ commentsCurrent.length }</span></h3>
 
     <ul class="film-details__comments-list">
-        ${ renderComments(commentsCurrent) }
     </ul>
 
     <div class="film-details__new-comment">
@@ -102,29 +81,9 @@ export default class CommentsView extends AbstractStatefulView {
     this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiClickHandler);
   };
 
-  setDeleteHandler = (callback) => {
-    this._callback.deleteComment = callback;
-    this.element.addEventListener('click', this.#deleteHandler);
-  };
-
   setCreateHandler = (callback) => {
     this._callback.createComment = callback;
     this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#createHandler);
-  };
-
-  #deleteHandler = (event) => {
-    if (event.target.classList.contains('film-details__comment-delete')) {
-      event.preventDefault();
-      const id = event.target.dataset.commentId;
-      const elementForDelete = this._state.commentIds.indexOf(id);
-      const comment = this.#comments.find((com) => `${com.id}` === id);
-      this._state.commentIds = [
-        ...this._state.commentIds.slice(0, elementForDelete),
-        ...this._state.commentIds.slice(elementForDelete + 1),
-      ];
-      this._callback.deleteComment(UserAction.DELETE_COMMENT, UpdateType.INIT, { film: { commentIds: this._state.commentIds }, comment });
-      document.removeEventListener('keydown', this.#createHandler);
-    }
   };
 
   #createHandler = (event) => {
@@ -138,8 +97,6 @@ export default class CommentsView extends AbstractStatefulView {
   };
 
   #createComment = () => ({
-    id: nanoid(),
-    author: 'dima m.',
     comment: he.encode(this.element.querySelector('.film-details__comment-input').value),
     date: new Date(),
     emotion: this.element.querySelector('.film-details__emoji-item:checked').value

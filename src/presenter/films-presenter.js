@@ -10,11 +10,13 @@ import {
   MOVIES_COUNT_TOP,
   SortType,
   UpdateType,
-  UserAction
+  UserAction,
+  TimeLimit
 } from '../constants';
 import {sortByCommentsCount, sortByDate, sortByRating, filter} from '../helpers.js';
 
 import { render, remove } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 export default class FilmsPresenter {
   #mainContainer;
@@ -37,6 +39,7 @@ export default class FilmsPresenter {
   #currentSortType;
   #filterModel;
   #isLoading = true;
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
   #allMoviesEmptyTitlesList = {
     [FilterType.ALL]: 'There are no movies in our database',
     [FilterType.WATCH_LIST]: 'There are no movies to watch now',
@@ -86,12 +89,19 @@ export default class FilmsPresenter {
     }
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#moviesModel.updateFilm(updateType, update);
+        try {
+          await this.#moviesModel.updateFilm(updateType, update);
+        } catch (err) {
+          this.#uiBlocker.unblock();
+          throw new Error('can\'t');
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   get movies() {

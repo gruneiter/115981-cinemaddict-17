@@ -38,7 +38,6 @@ export default class MoviesApiService extends ApiService {
       body: JSON.stringify(this.#adaptToServer(movie)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-
     return await ApiService.parseResponse(response);
   };
 
