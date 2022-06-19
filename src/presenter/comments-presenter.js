@@ -13,32 +13,30 @@ export default class CommentPresenter {
   constructor(moviesModel, commentsModel) {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
-    this.#moviesModel.addObserver(this.#handleModelChange);
     this.#commentsModel.addObserver(this.#handleModelChange);
   }
 
-  init(commentsContainer, commentIds, film) {
+  init(commentsContainer, film) {
     this.#commentsContainer = commentsContainer;
-    this.#commentIds = commentIds;
+    this.#commentIds = film.commentIds;
     const prevCommentsComponent = this.#commentsComponent;
     this.#commentsComponent = new CommentsView(this.#commentIds, this.#commentsModel.comments);
     this.#commentsComponent.setCreateHandler(this.#handleViewAction);
     this.#commentsComponent.setDeleteHandler(this.#handleViewAction);
     this.#film = film;
-    if (!prevCommentsComponent) {
+    if (prevCommentsComponent) {
+      replace(this.#commentsComponent, prevCommentsComponent);
+    } else {
       render(this.#commentsComponent, this.#commentsContainer);
       return;
-    }
-    if (this.#commentsContainer.contains(prevCommentsComponent.element)) {
-      replace(this.#commentsComponent, prevCommentsComponent);
     }
     remove(prevCommentsComponent);
   }
 
-  #handleModelChange = (updateType) => {
+  #handleModelChange = (updateType, update) => {
     switch (updateType) {
       case UpdateType.INIT:
-        this.init(this.#commentsContainer, this.#commentIds, this.#film, this.#commentsModel);
+        this.init(this.#commentsContainer, update);
         break;
     }
   };

@@ -58,7 +58,7 @@ export default class FilmDetailsPresenter {
     this.#bodyElement.classList.add('hide-overflow');
     render(this.#filmDetails, this.#bodyElement);
     this.#commentPresenter = new CommentPresenter(this.#moviesModel, this.#commentsModel);
-    this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film.commentIds, this.#film);
+    this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film);
   };
 
   #removeDetails = () => {

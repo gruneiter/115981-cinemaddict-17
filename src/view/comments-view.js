@@ -2,7 +2,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import he from 'he';
 import {nanoid} from 'nanoid';
 import { commentDate } from '../helpers';
-import { UserAction } from '../constants';
+import {UpdateType, UserAction} from '../constants';
 
 const updateCommentEmoji = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">` : '';
 
@@ -86,6 +86,7 @@ export default class CommentsView extends AbstractStatefulView {
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
+    this.setCreateHandler(this._callback.createComment);
   };
 
   #emojiClickHandler = (evt) => {
@@ -93,6 +94,7 @@ export default class CommentsView extends AbstractStatefulView {
     if (evt.target.alt === 'emoji') {
       const emojiName = evt.target.parentNode.getAttribute('for').slice(6);
       this.updateElement({selectedEmoji: emojiName});
+      this._restoreHandlers();
     }
   };
 
@@ -107,7 +109,7 @@ export default class CommentsView extends AbstractStatefulView {
 
   setCreateHandler = (callback) => {
     this._callback.createComment = callback;
-    document.addEventListener('keydown', this.#createHandler);
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#createHandler);
   };
 
   #deleteHandler = (event) => {
@@ -120,7 +122,7 @@ export default class CommentsView extends AbstractStatefulView {
         ...this._state.commentIds.slice(0, elementForDelete),
         ...this._state.commentIds.slice(elementForDelete + 1),
       ];
-      this._callback.deleteComment(UserAction.DELETE_COMMENT, '', { film: { commentIds: this._state.commentIds }, comment });
+      this._callback.deleteComment(UserAction.DELETE_COMMENT, UpdateType.INIT, { film: { commentIds: this._state.commentIds }, comment });
       document.removeEventListener('keydown', this.#createHandler);
     }
   };
@@ -130,8 +132,8 @@ export default class CommentsView extends AbstractStatefulView {
       const comment = this.#createComment();
       this._state.comments.push(comment);
       this._state.commentIds.push(comment.id);
-      this._callback.createComment(UserAction.ADD_COMMENT, '', { film: { commentIds: this._state.commentIds }, comment: this._state.comments.at(-1) });
-      document.removeEventListener('keydown', this.#createHandler);
+      this._callback.createComment(UserAction.ADD_COMMENT, UpdateType.INIT, { film: { commentIds: this._state.commentIds }, comment: this._state.comments.at(-1) });
+      this.element.querySelector('.film-details__emoji-list').removeEventListener('keydown', this.#createHandler);
     }
   };
 
