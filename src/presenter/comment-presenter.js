@@ -38,7 +38,7 @@ export default class CommentPresenter {
             ...this.#film.commentIds.slice(0, this.#film.commentIds.indexOf(update.id)),
             ...this.#film.commentIds.slice(this.#film.commentIds.indexOf(update.id) + 1),
           ];
-          await this.#moviesModel.updateFilm(updateType, this.#film);
+          await this.#moviesModel.updateFilm(UpdateType.PATCH, this.#film);
           await this.#commentsModel.deleteComment(updateType, update);
         } catch (err) {
           await this.#uiBlocker.unblock();
