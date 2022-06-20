@@ -1,9 +1,8 @@
-import FilmAbstractView from './film-abstract-view';
-
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { filmDate, getTimeFromMinutes, cutDescription } from '../helpers';
 
 const createTemplate = (film) => {
-  const { title, totalRating, release, runtime, genre, poster, description, commentIds, isInWatchlist, isWatched, isFavorite } = film;
+  const { title, totalRating, release, runtime, genre, poster, description, commentIds } = film;
   return (`
     <article class="film-card">
       <a class="film-card__link">
@@ -18,19 +17,15 @@ const createTemplate = (film) => {
         <p class="film-card__description">${cutDescription(description)}</p>
         <span class="film-card__comments">${ commentIds.length } comments</span>
       </a>
-      <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist${ isInWatchlist ? ' film-card__controls-item--active' : '' }" type="button" data-type="add">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched${ isWatched ? ' film-card__controls-item--active' : '' }" type="button" data-type="watched">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite${ isFavorite ? ' film-card__controls-item--active' : '' }" type="button" data-type="favorite">Mark as favorite</button>
-      </div>
     </article>
    `);
 };
 
-export default class FilmCardView extends FilmAbstractView {
-  constructor(_film) {
-    super(_film);
-    this._buttons = this.element.querySelector('.film-card__controls');
+export default class FilmCardView extends AbstractStatefulView {
+  #film;
+  constructor(film) {
+    super();
+    this.#film = film;
   }
 
   setLinkClickHandler = (callback) => {
@@ -45,6 +40,6 @@ export default class FilmCardView extends FilmAbstractView {
   };
 
   get template() {
-    return createTemplate(this._film);
+    return createTemplate(this.#film);
   }
 }

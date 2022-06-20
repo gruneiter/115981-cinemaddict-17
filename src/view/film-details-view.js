@@ -1,4 +1,4 @@
-import FilmAbstractView from './film-abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 import { filmDate, getTimeFromMinutes } from '../helpers';
 
@@ -16,9 +16,6 @@ const createTemplate = (data) => {
     director,
     writers,
     actors,
-    isInWatchlist,
-    isWatched,
-    isFavorite,
   } = data.film;
   return (`
     <section class="film-details">
@@ -77,15 +74,9 @@ const createTemplate = (data) => {
                 </tr>
               </table>
 
-              <p class="film-details__film-description">${description}</p>
+              <p class="film-details_#film-description">${description}</p>
             </div>
           </div>
-
-          <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist${ isInWatchlist ? ' film-details__control-button--active' : '' }" id="watchlist" name="watchlist" data-type="add">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--watched${ isWatched ? ' film-details__control-button--active' : '' }" id="watched" name="watched" data-type="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite${ isFavorite ? ' film-details__control-button--active' : '' }" id="favorite" name="favorite" data-type="favorite">Add to favorites</button>
-          </section>
         </div>
 
         <div class="film-details__bottom-container"></div>
@@ -94,13 +85,14 @@ const createTemplate = (data) => {
   `);
 };
 
-export default class FilmDetailsView extends FilmAbstractView {
+export default class FilmDetailsView extends AbstractStatefulView {
   _state = null;
+  #film;
 
-  constructor(_film, comments) {
-    super(_film);
-    this._state = { comments, film: this._film };
-    this._buttons = this.element.querySelector('.film-details__controls');
+  constructor(film, comments) {
+    super();
+    this.#film = film;
+    this._state = { comments, film: this.#film };
   }
 
   _restoreHandlers = () => {
@@ -135,12 +127,6 @@ export default class FilmDetailsView extends FilmAbstractView {
       this._callback.escPress();
       document.removeEventListener('keydown', this.#escHandler);
     }
-  };
-
-  updateDetails = (update) => {
-    const scroll = this.element.scrollTop;
-    this.updateElement(update);
-    this.element.scrollTo(0, scroll);
   };
 
   get template() {

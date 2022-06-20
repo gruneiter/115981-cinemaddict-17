@@ -19,6 +19,7 @@ export const UpdateType = {
   MINOR: 'minor',
   MAJOR: 'major',
   INIT: 'init',
+  DELETE: 'delete',
 };
 
 export const FilterType = {
@@ -26,4 +27,9 @@ export const FilterType = {
   WATCH_LIST:'watchlist',
   ALREADY_WATCHED:'history',
   FAVORITE:'favorites',
+};
+
+export const TimeLimit = {
+  LOWER_LIMIT: 0,
+  UPPER_LIMIT: 100,
 };

@@ -59,3 +59,27 @@ export const filter = {
   [FilterType.ALREADY_WATCHED]: (films) => films.filter((film) => film.isWatched),
   [FilterType.FAVORITE]: (films) => films.filter((film) => film.isFavorite),
 };
+
+export const adaptToClient = (movie) => ({
+  id: movie.id,
+  commentIds: movie.comments,
+  title: movie.film_info.title,
+  alternativeTitle: movie.film_info.alternative_title,
+  totalRating: movie.film_info.total_rating,
+  poster: movie.film_info.poster,
+  restriction: movie.film_info.age_rating,
+  director: movie.film_info.director,
+  writers: movie.film_info.writers,
+  actors: movie.film_info.actors,
+  release: {
+    date: movie.film_info.release.date,
+    releaseCountry: movie.film_info.release.release_country,
+  },
+  runtime: movie.film_info.runtime,
+  genre: movie.film_info.genre,
+  description: movie.film_info.description,
+  isFavorite: movie.user_details.favorite,
+  isWatched: movie.user_details.already_watched,
+  isInWatchlist: movie.user_details.watchlist,
+  watchingDate: movie.user_details.watching_date,
+});

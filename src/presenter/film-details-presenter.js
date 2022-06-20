@@ -1,7 +1,7 @@
 import CommentPresenter from '../presenter/comments-presenter';
 import FilmDetailsView from '../view/film-details-view';
 import {render, remove} from '../framework/render';
-import {UpdateType, UserAction} from '../constants';
+import FilmControlsPresenter from './film-controls-presenter';
 
 export default class FilmDetailsPresenter {
   #commentsModel;
@@ -9,6 +9,8 @@ export default class FilmDetailsPresenter {
   #changeData;
   #film;
   #filmDetails = null;
+  #filmControlsPresenter;
+  #filmControlsContainer;
   #prevFilmDetails;
   #prevFilm;
   #moviesModel;
@@ -17,40 +19,7 @@ export default class FilmDetailsPresenter {
     this.#commentsModel = comments;
     this.#moviesModel = moviesModel;
     this.#changeData = changeData;
-    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
-
-  #handleModelEvent = (updateType) => {
-    switch (updateType) {
-      case UserAction.DELETE_COMMENT:
-        this.#filmDetails.updateDetails({ film: this.#film, comments: this.#commentsModel.comments });
-        break;
-    }
-  };
-
-  #handleAddClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      {...this.#film, isInWatchlist: !this.#film.isInWatchlist},
-    );
-  };
-
-  #handleWatchedClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      {...this.#film, isWatched: !this.#film.isWatched},
-    );
-  };
-
-  #handleFavoriteClick = () => {
-    this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      {...this.#film, isFavorite: !this.#film.isFavorite},
-    );
-  };
 
   #bodyElement = document.querySelector('body');
 
@@ -58,18 +27,13 @@ export default class FilmDetailsPresenter {
     this.#bodyElement.classList.add('hide-overflow');
     render(this.#filmDetails, this.#bodyElement);
     this.#commentPresenter = new CommentPresenter(this.#moviesModel, this.#commentsModel);
-    this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film.commentIds, this.#film);
+    this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film);
   };
 
   #removeDetails = () => {
     remove(this.#filmDetails);
     this.#bodyElement.classList.remove('hide-overflow');
   };
-
-  get currentId() {
-    const isOpen = this.#filmDetails ? this.#filmDetails.element.parentNode.classList.contains('hide-overflow') : false;
-    return (this.#filmDetails && isOpen) ? this.#film.id : false;
-  }
 
   init = (film) => {
     this.#prevFilm = this.#film;
@@ -80,11 +44,11 @@ export default class FilmDetailsPresenter {
     }
     this.#commentsModel.init(this.#film);
     this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);
+    this.#filmControlsContainer = this.#filmDetails.element.querySelector('.film-details__top-container');
+    this.#filmControlsPresenter = new FilmControlsPresenter(this.#moviesModel, this.#changeData, true);
+    this.#filmControlsPresenter.init(this.#film, this.#filmControlsContainer);
     this.#filmDetails.setCloseHandler(this.#removeDetails);
     this.#filmDetails.setEscHandler(this.#removeDetails);
-    this.#filmDetails.setWatchlistClickHandler(this.#handleAddClick);
-    this.#filmDetails.setWatchedClickHandler(this.#handleWatchedClick);
-    this.#filmDetails.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#showDetails();
   };
 }
