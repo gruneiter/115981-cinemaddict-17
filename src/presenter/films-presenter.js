@@ -69,9 +69,6 @@ export default class FilmsPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#filmPresenter[data.id].forEach((presenter) => presenter.init(data));
-        if (this.#filmDetails.currentId) {
-          this.#filmDetails.init(data);
-        }
         break;
       case UpdateType.MINOR:
         this.#clearAllMoviesList();
@@ -123,7 +120,7 @@ export default class FilmsPresenter {
 
   #renderFilm = (film, container, popup) => {
     this.#filmPresenter[film.id] = this.#filmPresenter[film.id] || [];
-    const card = new FilmPresenter(container, popup, this.#handleViewAction, this.#filterModel);
+    const card = new FilmPresenter(container, popup, this.#handleViewAction, this.#filterModel, this.#moviesModel);
     card.init(film);
     this.#filmPresenter[film.id].push(card);
   };
