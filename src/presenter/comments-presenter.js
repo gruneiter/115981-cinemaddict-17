@@ -1,8 +1,8 @@
 import { render, replace } from '../framework/render';
 import CommentsView from '../view/comments-view';
-import {UpdateType, UserAction, TimeLimit} from '../constants';
+import {UpdateType} from '../constants';
 import CommentPresenter from './comment-presenter';
-import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import CommentsFormPresenter from './comments-form-presenter';
 
 export default class CommentsPresenter {
   #commentsContainer = null;
@@ -12,13 +12,18 @@ export default class CommentsPresenter {
   #moviesModel;
   #film;
   #commentsList;
-  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
+  #commentsFormPresenter;
 
   constructor(moviesModel, commentsModel) {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#commentsModel.addObserver(this.#handleModelChange);
   }
+
+  #renderForm = (commentsFormContainer, film) => {
+    this.#commentsFormPresenter = new CommentsFormPresenter(this.#moviesModel, this.#commentsModel);
+    this.#commentsFormPresenter.init(commentsFormContainer, film);
+  };
 
   #renderComment = (comment) => {
     this.#commentsList = this.#commentsComponent.element.querySelector('.film-details__comments-list');
@@ -35,9 +40,9 @@ export default class CommentsPresenter {
     this.#commentIds = film.commentIds;
     const prevCommentsComponent = this.#commentsComponent;
     this.#commentsComponent = new CommentsView(this.#commentIds, this.#commentsModel.comments);
-    this.#commentsComponent.setCreateHandler(this.#handleViewAction);
     this.#film = film;
     this.#renderCommentsList();
+    this.#renderForm(this.#commentsComponent.element, this.#film);
     if (prevCommentsComponent) {
       replace(this.#commentsComponent, prevCommentsComponent);
     } else {
@@ -54,19 +59,5 @@ export default class CommentsPresenter {
         this.init(this.#commentsContainer, this.#film);
         break;
     }
-  };
-
-  #handleViewAction = async (actionType, updateType, update) => {
-    this.#uiBlocker.block();
-    switch (actionType) {
-      case UserAction.ADD_COMMENT:
-        try {
-          await this.#commentsModel.addComment(updateType, update.comment);
-        } catch (err) {
-          this.#commentsComponent.shake();
-        }
-        break;
-    }
-    this.#uiBlocker.unblock();
   };
 }
