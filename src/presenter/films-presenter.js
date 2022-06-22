@@ -198,12 +198,7 @@ export default class FilmsPresenter {
   #clearAllMoviesList = ({resetRenderedTaskCount = false, resetSortType = false} = {}) => {
     const moviesCount = this.movies.length;
     remove(this.#allMovies);
-
-    if (resetRenderedTaskCount) {
-      this.#moviesLoaded = MOVIES_COUNT_ROW;
-    } else {
-      this.#moviesLoaded = Math.min(moviesCount, this.#moviesLoaded);
-    }
+    this.#moviesLoaded = resetRenderedTaskCount ? MOVIES_COUNT_ROW : Math.min(moviesCount, this.#moviesLoaded);
     if (resetSortType) {
       this.#sortModel.setSort(false, SortType.DEFAULT);
     }
