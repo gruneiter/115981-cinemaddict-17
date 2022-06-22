@@ -2,7 +2,7 @@ import Observable from '../framework/observable';
 import {UpdateType} from '../constants';
 import {adaptToClient} from '../helpers';
 
-export default class MovieModel extends Observable {
+export default class MoviesModel extends Observable {
   #movies = [];
 
   #moviesApiService = null;

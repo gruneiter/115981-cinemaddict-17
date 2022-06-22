@@ -18,7 +18,7 @@ const createTemplate = (comment) => (`
   </li>`
 );
 
-export default class CommentsView extends AbstractStatefulView {
+export default class CommentView extends AbstractStatefulView {
 
   #comment;
 
