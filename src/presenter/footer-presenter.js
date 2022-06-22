@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import FooterStatisticsView from '../view/footer-statistics-view';
 import {UpdateType} from '../constants';
 

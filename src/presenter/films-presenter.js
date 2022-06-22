@@ -22,7 +22,6 @@ export default class FilmsPresenter {
   #mainContainer;
   #moviesModel;
   #commentsModel;
-  #movies;
   #allMoviesTitle;
   #allMovies;
   #allMoviesContainerElement;
@@ -53,7 +52,6 @@ export default class FilmsPresenter {
     this.#commentsModel = commentsModel;
     this.#sortModel = sortModel;
     this.#filterModel = filterModel;
-    this.#movies = this.movies;
     this.#filmDetails = new FilmDetailsPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction);
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);

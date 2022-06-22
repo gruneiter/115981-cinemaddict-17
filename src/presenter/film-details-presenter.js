@@ -11,8 +11,6 @@ export default class FilmDetailsPresenter {
   #filmDetails = null;
   #filmControlsPresenter;
   #filmControlsContainer;
-  #prevFilmDetails;
-  #prevFilm;
   #moviesModel;
 
   constructor(comments, moviesModel, changeData) {
@@ -36,11 +34,10 @@ export default class FilmDetailsPresenter {
   };
 
   init = (film) => {
-    this.#prevFilm = this.#film;
     this.#film = film;
-    this.#prevFilmDetails = this.#filmDetails;
-    if (this.#prevFilmDetails) {
-      remove(this.#prevFilmDetails);
+    const prevFilmDetails = this.#filmDetails;
+    if (prevFilmDetails) {
+      remove(prevFilmDetails);
     }
     this.#commentsModel.init(this.#film);
     this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);

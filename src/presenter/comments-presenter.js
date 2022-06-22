@@ -21,7 +21,7 @@ export default class CommentsPresenter {
   }
 
   #renderForm = (commentsFormContainer, film) => {
-    this.#commentsFormPresenter = new CommentsFormPresenter(this.#moviesModel, this.#commentsModel);
+    this.#commentsFormPresenter = new CommentsFormPresenter(this.#commentsModel);
     this.#commentsFormPresenter.init(commentsFormContainer, film);
   };
 

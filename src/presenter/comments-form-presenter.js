@@ -7,13 +7,11 @@ import {render, replace} from '../framework/render';
 export default class CommentsFormPresenter {
   #commentsModel = null;
   #film;
-  #moviesModel;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
   #commentsFormComponent = null;
   #commentsFormContainer;
 
-  constructor(moviesModel, commentsModel) {
-    this.#moviesModel = moviesModel;
+  constructor(commentsModel) {
     this.#commentsModel = commentsModel;
     this.#commentsModel.addObserver(this.#handleModelChange);
   }
