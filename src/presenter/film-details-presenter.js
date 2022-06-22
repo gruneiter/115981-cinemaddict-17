@@ -11,8 +11,6 @@ export default class FilmDetailsPresenter {
   #filmDetails = null;
   #filmControlsPresenter;
   #filmControlsContainer;
-  #prevFilmDetails;
-  #prevFilm;
   #moviesModel;
 
   constructor(comments, moviesModel, changeData) {
@@ -30,25 +28,24 @@ export default class FilmDetailsPresenter {
     this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film);
   };
 
-  #removeDetails = () => {
+  #handleRemoveDetails = () => {
     remove(this.#filmDetails);
     this.#bodyElement.classList.remove('hide-overflow');
   };
 
   init = (film) => {
-    this.#prevFilm = this.#film;
     this.#film = film;
-    this.#prevFilmDetails = this.#filmDetails;
-    if (this.#prevFilmDetails) {
-      remove(this.#prevFilmDetails);
+    const prevFilmDetails = this.#filmDetails;
+    if (prevFilmDetails) {
+      remove(prevFilmDetails);
     }
     this.#commentsModel.init(this.#film);
     this.#filmDetails = new FilmDetailsView(film, this.#commentsModel.comments);
     this.#filmControlsContainer = this.#filmDetails.element.querySelector('.film-details__top-container');
     this.#filmControlsPresenter = new FilmControlsPresenter(this.#moviesModel, this.#changeData, true);
     this.#filmControlsPresenter.init(this.#film, this.#filmControlsContainer);
-    this.#filmDetails.setCloseHandler(this.#removeDetails);
-    this.#filmDetails.setEscHandler(this.#removeDetails);
+    this.#filmDetails.setCloseHandler(this.#handleRemoveDetails);
+    this.#filmDetails.setEscHandler(this.#handleRemoveDetails);
     this.#showDetails();
   };
 }

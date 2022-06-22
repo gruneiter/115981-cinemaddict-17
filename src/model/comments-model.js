@@ -2,7 +2,7 @@ import Observable from '../framework/observable';
 import {UpdateType} from '../constants';
 import {adaptToClient} from '../helpers';
 
-export default class CommentModel extends Observable {
+export default class CommentsModel extends Observable {
   #comments = [];
   #moviesApiService = null;
   #movie = null;

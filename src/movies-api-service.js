@@ -44,28 +44,28 @@ export default class MoviesApiService extends ApiService {
   #adaptToServer = (movie) => ({
     id: movie.id,
     comments: movie.commentIds,
-    film_info: {  // eslint-disable-line
+    ['film_info']: {
       actors: movie.actors,
-      age_rating: movie.restriction,  // eslint-disable-line
-      alternative_title: movie.alternativeTitle,  // eslint-disable-line
+      ['age_rating']: movie.restriction,
+      ['alternative_title']: movie.alternativeTitle,
       description: movie.description,
       director: movie.director,
       genre: movie.genre,
       poster: movie.poster,
       release: {
         date: movie.release.date,
-        release_country: movie.release.releaseCountry,  // eslint-disable-line
+        ['release_country']: movie.release.releaseCountry,
       },
       runtime: movie.runtime,
       title: movie.title,
-      total_rating: movie.totalRating,  // eslint-disable-line
+      ['total_rating']: movie.totalRating,
       writers: movie.writers,
     },
-    user_details: {  // eslint-disable-line
-      already_watched: movie.isWatched,  // eslint-disable-line
+    ['user_details']: {
+      ['already_watched']: movie.isWatched,
       favorite: movie.isFavorite,
       watchlist: movie.isInWatchlist,
-      watching_date: movie.watchingDate,  // eslint-disable-line
+      ['watching_date']: movie.watchingDate,
     },
   });
 }

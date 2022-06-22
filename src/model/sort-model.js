@@ -15,6 +15,7 @@ export default class SortModel extends Observable {
 
   setActive = (state) => {
     this.#active = !!state;
+    this._notify();
   };
 
   setSort = (updateType, sort) => {

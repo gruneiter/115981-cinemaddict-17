@@ -22,7 +22,6 @@ export default class FilmsPresenter {
   #mainContainer;
   #moviesModel;
   #commentsModel;
-  #movies;
   #allMoviesTitle;
   #allMovies;
   #allMoviesContainerElement;
@@ -53,7 +52,6 @@ export default class FilmsPresenter {
     this.#commentsModel = commentsModel;
     this.#sortModel = sortModel;
     this.#filterModel = filterModel;
-    this.#movies = this.movies;
     this.#filmDetails = new FilmDetailsPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction);
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);
@@ -73,10 +71,16 @@ export default class FilmsPresenter {
       case UpdateType.MINOR:
         this.#clearAllMoviesList();
         this.#renderAllMovies();
+        if (this.#filmPresenter[data.id]) {
+          this.#filmPresenter[data.id].forEach((presenter) => presenter.init(data));
+        }
         break;
       case UpdateType.MAJOR:
         this.#clearAllMoviesList({resetRenderedTaskCount: true, resetSortType: true});
         this.#renderAllMovies();
+        if (this.#filmPresenter[data.id]) {
+          this.#filmPresenter[data.id].forEach((presenter) => presenter.init(data));
+        }
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
@@ -88,9 +92,27 @@ export default class FilmsPresenter {
 
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
+    const updatedMovie = this.#moviesModel.movies.find((movie) => movie.id === update.id);
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         try {
+          switch (this.#filterModel.filter) {
+            case FilterType.WATCH_LIST:
+              if (updatedMovie.isInWatchlist !== update.isInWatchlist) {
+                updateType = UpdateType.MINOR;
+              }
+              break;
+            case FilterType.ALREADY_WATCHED:
+              if (updatedMovie.isWatched !== update.isWatched) {
+                updateType = UpdateType.MINOR;
+              }
+              break;
+            case FilterType.FAVORITE:
+              if (updatedMovie.isFavorite !== update.isFavorite) {
+                updateType = UpdateType.MINOR;
+              }
+              break;
+          }
           await this.#moviesModel.updateFilm(updateType, update);
         } catch (err) {
           this.#uiBlocker.unblock();
@@ -103,7 +125,7 @@ export default class FilmsPresenter {
 
   get movies() {
     const filterType = this.#filterModel.filter;
-    const films = this.#moviesModel.movies;
+    const films = [...this.#moviesModel.movies];
     const filteredFilms = filter[filterType](films);
     this.#setSortType(this.#sortModel.sort);
     this.#sortModel.setActive(filteredFilms.length);
@@ -176,12 +198,7 @@ export default class FilmsPresenter {
   #clearAllMoviesList = ({resetRenderedTaskCount = false, resetSortType = false} = {}) => {
     const moviesCount = this.movies.length;
     remove(this.#allMovies);
-
-    if (resetRenderedTaskCount) {
-      this.#moviesLoaded = MOVIES_COUNT_ROW;
-    } else {
-      this.#moviesLoaded = Math.min(moviesCount, this.#moviesLoaded);
-    }
+    this.#moviesLoaded = resetRenderedTaskCount ? MOVIES_COUNT_ROW : Math.min(moviesCount, this.#moviesLoaded);
     if (resetSortType) {
       this.#sortModel.setSort(false, SortType.DEFAULT);
     }

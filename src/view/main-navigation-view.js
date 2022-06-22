@@ -29,9 +29,10 @@ export default class MainNavigationView extends AbstractStatefulView {
   };
 
   #filterTypeChangeHandler = (evt) => {
-    if (evt.target.tagName === 'A') {
+    if (evt.target.closest('.main-navigation__item')) {
+      const link = evt.target.closest('.main-navigation__item');
       evt.preventDefault();
-      this._callback.filterTypeChange(evt.target.href);
+      this._callback.filterTypeChange(link.href);
     }
   };
 }
