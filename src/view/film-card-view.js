@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { filmDate, getTimeFromMinutes, cutDescription } from '../helpers';
+import { formatFilmDate, getTimeFromMinutes, cutDescription } from '../helpers';
 
 const createTemplate = (film) => {
   const { title, totalRating, release, runtime, genre, poster, description, commentIds } = film;
@@ -9,7 +9,7 @@ const createTemplate = (film) => {
         <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${totalRating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${filmDate(release.date)}</span>
+          <span class="film-card__year">${formatFilmDate(release.date)}</span>
           <span class="film-card__duration">${getTimeFromMinutes(runtime)}</span>
           <span class="film-card__genre">${ genre.join(' ') }</span>
         </p>

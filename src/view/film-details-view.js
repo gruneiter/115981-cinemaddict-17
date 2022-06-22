@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
-import { filmDate, getTimeFromMinutes } from '../helpers';
+import { formatFilmDate, getTimeFromMinutes } from '../helpers';
 
 const createTemplate = (data) => {
   const {
@@ -57,7 +57,7 @@ const createTemplate = (data) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${ filmDate(release.date) }</td>
+                  <td class="film-details__cell">${ formatFilmDate(release.date) }</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

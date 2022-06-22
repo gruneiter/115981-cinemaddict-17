@@ -1,9 +1,9 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {numberFormat} from '../helpers';
+import {formatNumber} from '../helpers';
 
 const createTemplate = (stats) => (`
     <section class="footer__statistics">
-      <p>${numberFormat(stats)} movies inside</p>
+      <p>${formatNumber(stats)} movies inside</p>
     </section>
   `);
 

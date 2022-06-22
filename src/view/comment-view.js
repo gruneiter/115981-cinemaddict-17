@@ -1,4 +1,4 @@
-import {commentDate} from '../helpers';
+import {formatCommentDate} from '../helpers';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {UpdateType, UserAction} from '../constants';
 
@@ -11,7 +11,7 @@ const createTemplate = (comment) => (`
       <p class="film-details__comment-text">${comment.comment}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${comment.author}</span>
-        <span class="film-details__comment-day">${commentDate(comment.date)}</span>
+        <span class="film-details__comment-day">${formatCommentDate(comment.date)}</span>
         <button class="film-details__comment-delete" data-comment-id= '${ comment.id }' ${ comment.isDeleting ? 'disabled' : '' }>${ comment.isDeleting ? 'Deleting...' : 'Delete' }</button>
       </p>
     </div>

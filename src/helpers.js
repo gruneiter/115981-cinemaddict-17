@@ -18,11 +18,11 @@ export const getTimeFromMinutes = (mins) => {
 
 export const cutDescription = (string) => `${string.substr(0, 140)}…`;
 
-export const filmDate = (date) => dayjs(date).format('D MMMM YYYY');
+export const formatFilmDate = (date) => dayjs(date).format('D MMMM YYYY');
 
-export const commentDate = (date) => dayjs(date).fromNow();
+export const formatCommentDate = (date) => dayjs(date).fromNow();
 
-export const numberFormat = (price) =>
+export const formatNumber = (price) =>
   price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 export const getWeightForNullDate = (dateA, dateB) => {
