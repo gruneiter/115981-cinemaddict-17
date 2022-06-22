@@ -30,7 +30,7 @@ export default class FilmDetailsPresenter {
     this.#commentPresenter.init(this.#filmDetails.element.querySelector('.film-details__bottom-container'), this.#film);
   };
 
-  #removeDetails = () => {
+  #handleRemoveDetails = () => {
     remove(this.#filmDetails);
     this.#bodyElement.classList.remove('hide-overflow');
   };
@@ -47,8 +47,8 @@ export default class FilmDetailsPresenter {
     this.#filmControlsContainer = this.#filmDetails.element.querySelector('.film-details__top-container');
     this.#filmControlsPresenter = new FilmControlsPresenter(this.#moviesModel, this.#changeData, true);
     this.#filmControlsPresenter.init(this.#film, this.#filmControlsContainer);
-    this.#filmDetails.setCloseHandler(this.#removeDetails);
-    this.#filmDetails.setEscHandler(this.#removeDetails);
+    this.#filmDetails.setCloseHandler(this.#handleRemoveDetails);
+    this.#filmDetails.setEscHandler(this.#handleRemoveDetails);
     this.#showDetails();
   };
 }
