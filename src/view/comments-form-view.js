@@ -77,7 +77,7 @@ export default class CommentsFormView extends AbstractStatefulView {
       const comment = this.#createComment();
       this._state.comments.push(comment);
       this._state.commentIds.push(comment.id);
-      this._callback.createComment(UserAction.ADD_COMMENT, UpdateType.INIT, { film: { commentIds: this._state.commentIds }, comment: this._state.comments.at(-1) });
+      this._callback.createComment(UserAction.ADD_COMMENT, UpdateType.PATCH, { film: { commentIds: this._state.commentIds }, comment: this._state.comments.at(-1) });
       this.element.querySelector('.film-details__emoji-list').removeEventListener('keydown', this.#createHandler);
     }
   };

@@ -13,7 +13,7 @@ import {
   UserAction,
   TimeLimit
 } from '../constants';
-import {sortByCommentsCount, sortByDate, sortByRating, filter} from '../helpers.js';
+import {sortByCommentsCount, sortByDate, sortByRating, filter, compareArrays} from '../helpers.js';
 
 import { render, remove } from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
@@ -39,6 +39,7 @@ export default class FilmsPresenter {
   #filterModel;
   #isLoading = true;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
+  #renderedCategories = [];
   #allMoviesEmptyTitlesList = {
     [FilterType.ALL]: 'There are no movies in our database',
     [FilterType.WATCH_LIST]: 'There are no movies to watch now',
@@ -54,6 +55,7 @@ export default class FilmsPresenter {
     this.#filterModel = filterModel;
     this.#filmDetails = new FilmDetailsPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction);
     this.#moviesModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#setSortType(this.#sortModel.sort);
@@ -67,6 +69,7 @@ export default class FilmsPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#filmPresenter[data.id].forEach((presenter) => presenter.init(data));
+        this.#renderMostCommented();
         break;
       case UpdateType.MINOR:
         this.#clearAllMoviesList();
@@ -141,6 +144,9 @@ export default class FilmsPresenter {
   }
 
   #renderFilm = (film, container, popup) => {
+    if (film === undefined) {
+      return;
+    }
     this.#filmPresenter[film.id] = this.#filmPresenter[film.id] || [];
     const card = new FilmPresenter(container, popup, this.#handleViewAction, this.#filterModel, this.#moviesModel);
     card.init(film);
@@ -175,8 +181,13 @@ export default class FilmsPresenter {
   }
 
   #renderCategory = (category, list, count, position = 'beforeend') => {
-    render(category, this.#main.element, position);
     const listContainer = this.#getContainer(category);
+    if (this.#renderedCategories.find((rendered) => rendered === category)) {
+      listContainer.innerHTML = '';
+    } else {
+      render(category, this.#main.element, position);
+      this.#renderedCategories.push(category);
+    }
     if (this.#isLoading) {
       return;
     }
@@ -204,11 +215,23 @@ export default class FilmsPresenter {
     }
   };
 
+  #renderMostCommented = () => {
+    const oldMostCommented = this.#mostCommentedMovies || [];
+    this.#sortModel.setSort(UpdateType.NONE, SortType.COMMENTS);
+    this.#mostCommentedMovies = [...this.movies]
+      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP))
+      .filter((movie) => movie.commentIds.length > 0);
+    this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
+    if (!compareArrays(oldMostCommented, this.#mostCommentedMovies,'id')) {
+      this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    }
+  };
+
   init = () => {
     this.#sortModel.setSort(UpdateType.NONE, SortType.RATING);
-    this.#topRatedMovies = [...this.movies].slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
-    this.#sortModel.setSort(UpdateType.NONE, SortType.COMMENTS);
-    this.#mostCommentedMovies = [...this.movies].slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    this.#topRatedMovies = [...this.movies]
+      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP))
+      .filter((movie) => movie.totalRating > 0);
     this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
 
     this.#renderMainContainer();
@@ -217,6 +240,6 @@ export default class FilmsPresenter {
       return;
     }
     this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
-    this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    this.#renderMostCommented();
   };
 }
