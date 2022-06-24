@@ -219,8 +219,8 @@ export default class FilmsPresenter {
     const oldMostCommented = this.#mostCommentedMovies || [];
     this.#sortModel.setSort(UpdateType.NONE, SortType.COMMENTS);
     this.#mostCommentedMovies = [...this.movies]
-      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP))
-      .filter((movie) => movie.commentIds.length > 0);
+      .filter((movie) => movie.commentIds.length > 0)
+      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
     this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
     if (!compareArrays(oldMostCommented, this.#mostCommentedMovies,'id')) {
       this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
@@ -230,8 +230,8 @@ export default class FilmsPresenter {
   init = () => {
     this.#sortModel.setSort(UpdateType.NONE, SortType.RATING);
     this.#topRatedMovies = [...this.movies]
-      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP))
-      .filter((movie) => movie.totalRating > 0);
+      .filter((movie) => movie.totalRating > 0)
+      .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
     this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
 
     this.#renderMainContainer();
