@@ -52,6 +52,7 @@ export default class CommentsPresenter {
 
   #handleModelChange = (updateType, update) => {
     switch (updateType) {
+      case UpdateType.PATCH:
       case UpdateType.INIT:
         this.init(this.#commentsContainer, update);
         break;

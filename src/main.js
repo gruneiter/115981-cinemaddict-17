@@ -10,7 +10,7 @@ import FilterModel from './model/filter-model';
 
 import MoviesApiService from './movies-api-service.js';
 
-const AUTHORIZATION = 'Basic MzjPWWRdmAVwhJuz';
+const AUTHORIZATION = 'Basic v0sbM6ar1ymY';
 const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
 
 const mainElement = document.querySelector('.main');
