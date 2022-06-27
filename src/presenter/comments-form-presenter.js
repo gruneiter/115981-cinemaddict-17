@@ -16,7 +16,7 @@ export default class CommentsFormPresenter {
     this.#commentsModel.addObserver(this.#handleModelChange);
   }
 
-  #handleModelChange = (updateType, update) => {
+  #handleModelChange = async (updateType, update) => {
     switch (updateType) {
       case UpdateType.INIT:
         this.init(this.#commentsFormContainer, update);

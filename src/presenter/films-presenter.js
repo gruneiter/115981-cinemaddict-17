@@ -217,12 +217,13 @@ export default class FilmsPresenter {
 
   #renderMostCommented = () => {
     const oldMostCommented = this.#mostCommentedMovies || [];
+    const oldSort = this.#sortModel.sort;
     this.#sortModel.setSort(UpdateType.NONE, SortType.COMMENTS);
     this.#mostCommentedMovies = [...this.movies]
       .filter((movie) => movie.commentIds.length > 0)
       .slice(0, Math.min(this.movies.length, MOVIES_COUNT_TOP));
-    this.#sortModel.setSort(UpdateType.NONE, SortType.DEFAULT);
-    if (!compareArrays(oldMostCommented, this.#mostCommentedMovies,'id')) {
+    this.#sortModel.setSort(UpdateType.NONE, oldSort);
+    if (!compareArrays(oldMostCommented, this.#mostCommentedMovies)) {
       this.#renderCategory(this.#mostCommented, this.#mostCommentedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
     }
   };
@@ -239,7 +240,9 @@ export default class FilmsPresenter {
     if (this.#isLoading) {
       return;
     }
-    this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    if (this.#topRatedMovies.length > 0) {
+      this.#renderCategory(this.#topRated, this.#topRatedMovies, Math.min(this.movies.length, MOVIES_COUNT_TOP));
+    }
     this.#renderMostCommented();
   };
 }

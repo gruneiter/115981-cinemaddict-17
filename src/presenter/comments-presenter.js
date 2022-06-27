@@ -21,7 +21,7 @@ export default class CommentsPresenter {
   }
 
   #renderForm = (commentsFormContainer, film) => {
-    this.#commentsFormPresenter = new CommentsFormPresenter(this.#commentsModel);
+    this.#commentsFormPresenter = new CommentsFormPresenter(this.#commentsModel, this.#moviesModel);
     this.#commentsFormPresenter.init(commentsFormContainer, film);
   };
 
@@ -50,10 +50,11 @@ export default class CommentsPresenter {
     }
   }
 
-  #handleModelChange = (updateType, update) => {
+  #handleModelChange = async (updateType, update) => {
     switch (updateType) {
       case UpdateType.PATCH:
       case UpdateType.INIT:
+        await this.#moviesModel.updateFilm(UpdateType.PATCH, update);
         this.init(this.#commentsContainer, update);
         break;
       case UpdateType.DELETE:

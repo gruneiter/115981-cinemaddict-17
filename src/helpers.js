@@ -84,4 +84,4 @@ export const adaptToClient = (movie) => ({
   watchingDate: movie.user_details.watching_date,
 });
 
-export const compareArrays = (arr1, arr2, prop) => arr2.filter((item1) => arr1.find((item2) => item1[prop] === item2[prop])).length === arr2.length;
+export const compareArrays = (arr1, arr2) => arr2.filter((item, i) => arr1[i] === item).length === arr2.length;
